@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Exact location transfer</string>
+    <string name="app_name">정확한 내 위치 전송</string>
 
-    <string name="menu_title_quick_location">Quick Location</string>
-    <string name="menu_title_exact_location">Exact Location</string>
-
+    <string name="menu_title_quick_location">빠른 내 위치</string>
+    <string name="menu_title_exact_location">정확한 내 위치</string>
+    
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

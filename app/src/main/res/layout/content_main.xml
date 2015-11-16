@@ -9,28 +9,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior" tools:showIn="@layout/app_bar_main"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
+        android:id="@+id/replace_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="위치찾기"
-            android:id="@+id/btn_find_loc" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="위치정보"
-            android:id="@+id/textView2" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="위치전송"
-            android:id="@+id/btn_send_loc"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
+    </FrameLayout>
 </RelativeLayout>

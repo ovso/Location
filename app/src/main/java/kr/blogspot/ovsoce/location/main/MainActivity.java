@@ -1,16 +1,17 @@
-package kr.blogspot.ovsoce.location;
+package kr.blogspot.ovsoce.location.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,14 +31,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.List;
+import kr.blogspot.ovsoce.location.R;
+import kr.blogspot.ovsoce.location.fragment.BaseFragment;
+import kr.blogspot.ovsoce.location.fragment.Exact.ExactFragment;
+import kr.blogspot.ovsoce.location.fragment.Quick.QuickFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LocationListener, MainPresenter.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,11 +66,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        findViewById(R.id.btn_find_loc).setOnClickListener(new View.OnClickListener() {
+/*        findViewById(R.id.nav_quick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-                    checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, Process.myPid(), Process.myUid())
+                    checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, Process.myPid(), Process.myUid());;
                     if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0x12);
                     } else {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        findViewById(R.id.btn_send_loc).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.nav_quick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
@@ -89,10 +92,25 @@ public class MainActivity extends AppCompatActivity
                     doSend();
                 }
             }
-        });
+        });*/
+
+        mPresenter = new MainPresenterImpl(this);
+        mPresenter.init(getApplicationContext());
+
+        navigationView.setCheckedItem(R.id.nav_quick);
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_quick));
     }
+    private MainPresenter mPresenter;
     private void findLocation(){
         mProgressDialog = ProgressDialog.show(this, "d", "d");
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                dialog.dismiss();
+                mLocationManager.removeUpdates(MainActivity.this);
+            }
+        });
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1, this);
         //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 1, this);
@@ -100,7 +118,6 @@ public class MainActivity extends AppCompatActivity
         mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
 
         // checkPermission~~~~
-
     }
     ProgressDialog mProgressDialog;
     private LocationManager mLocationManager;
@@ -108,8 +125,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
 
-        String msg = "New Latitude: " + location.getLatitude()
-                + "New Longitude: " + location.getLongitude();
+        String msg = "Latitude: " + location.getLatitude()
+                + ", Longitude: " + location.getLongitude();
 
         Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
         Log.d("MainActivity", msg);
@@ -261,22 +278,38 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_quick) {
+            replaceFragment(getFragment(id));
+        } else if (id == R.id.nav_exact) {
+            replaceFragment(getFragment(id));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.replace_container, fragment);
+        transaction.commit();
+    }
+    private BaseFragment mQuickFragment;
+    private BaseFragment mExactFragment;
+    private BaseFragment getFragment(int menuId) {
+        BaseFragment fragment = null;
+        if(menuId == R.id.nav_quick) {
+            if(mQuickFragment == null) {
+                mQuickFragment = new QuickFragment();
+            }
+            fragment = mQuickFragment;
+        } else if(menuId == R.id.nav_exact) {
+            if(mExactFragment == null) {
+                mExactFragment = new ExactFragment();
+            }
+            fragment = mExactFragment;
+        }
+
+        return fragment;
     }
 }
