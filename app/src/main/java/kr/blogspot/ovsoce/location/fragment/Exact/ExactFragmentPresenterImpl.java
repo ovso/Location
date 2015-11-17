@@ -1,5 +1,6 @@
 package kr.blogspot.ovsoce.location.fragment.Exact;
 
+import android.app.Fragment;
 import android.content.Context;
 
 /**
@@ -12,12 +13,12 @@ public class ExactFragmentPresenterImpl implements ExactFragmentPresenter {
     }
 
     @Override
-    public void findLocation(Context context) {
+    public void init(Context context) {
 
     }
 
     @Override
-    public void init(Context context) {
+    public void requestUpdate(Fragment fragment) {
 
     }
 }
