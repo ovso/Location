@@ -2,15 +2,16 @@ package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
+import android.os.Handler;
+
+import java.io.IOException;
 
 import kr.blogspot.ovsoce.location.common.Log;
 
 /**
  * Created by jaeho_oh on 2015-11-16.
  */
-public class QuickFragmentPresenterImpl implements QuickFragmentPresenter, LocationListener {
+public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     private QuickFragmentPresenter.View mView;
     private QuickFragmentModel mModel;
 
@@ -26,27 +27,9 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter, Locat
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        Log.d("Lat = " + location.getLatitude() + ", Lon = " + location.getLongitude());
-        String address = "temp";
+    public void onLocation(final Context context, final Location location) {
+        String a = mModel.getAddress(context, location);
 
-        mModel.getAddress(location);
-        mView.showAddress(address);
-        mView.hideLoading();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d("provider = "+provider +", status = " + status + ", extras = " + extras);
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        Log.d("provider = " + provider);
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        Log.d("provider = " + provider);
+        //mView.showAddress();
     }
 }

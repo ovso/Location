@@ -11,13 +11,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.support.v7.widget.Toolbar;
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.BaseFragment;
@@ -26,7 +24,7 @@ import kr.blogspot.ovsoce.location.fragment.BaseFragment;
  * Created by jaeho_oh on 2015-11-16.
  */
 public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener {
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
@@ -114,22 +112,24 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("lat = " + location.getLatitude()+", lng = " + location.getLongitude());
+        Log.d("Lat = " + location.getLatitude() + ", Lon = " + location.getLongitude());
+        mPresenter.onLocation(getActivity(), location);
         hideLoading();
+
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
+        Log.d("provider = "+provider +", status = " + status + ", extras = " + extras);
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        Log.d("provider = " + provider);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        Log.d("provider = " + provider);
     }
 }
