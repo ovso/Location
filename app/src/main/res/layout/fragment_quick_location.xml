@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="bottom">
+
     <Button
-        android:id="@+id/btn_find_location"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="위경도 찾기"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="maps"
+        android:id="@+id/btn_maps"
+        android:layout_gravity="right" />
+
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
@@ -16,4 +20,10 @@
         android:id="@+id/tv_latlng"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_find_location"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="위경도 찾기" />
 </LinearLayout>

@@ -1,19 +1,20 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.provider.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.URL;
-
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.http.HttpRequest;
+import kr.blogspot.ovsoce.location.http.HttpRequestThread;
 import kr.blogspot.ovsoce.location.main.Model;
 
 /**
@@ -33,9 +34,36 @@ public class QuickFragmentModel extends Model {
         new HttpRequest(uri.toString(), new HttpRequest.ResultListener() {
             @Override
             public void onResult(String result) {
-                view.showAddress(parseJson(result));
+                String address = parseJson(result);
+                if( address != null) {
+                    view.showAddress(address);
+                } else {
+                    view.showToast(getMsg(context, "JSONException"));
+                }
+                view.hideLoading();
             }
         }).execute();
+
+/*
+        new HttpRequestThread(uri.toString(), new HttpRequest.ResultListener() {
+            @Override
+            public void onResult(String result) {
+                final String address = parseJson(result);
+                Activity activity = (Activity) context;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (address != null) {
+                            view.showAddress(address);
+                        } else {
+                            view.showToast(getMsg(context, "JSONException"));
+                        }
+                        view.hideLoading();
+                    }
+                });
+            }
+        }).start();
+*/
     }
     private String parseJson(String json) {
         if(json != null) {
@@ -51,5 +79,28 @@ public class QuickFragmentModel extends Model {
         } else {
             return null;
         }
+    }
+    public Intent getGPSIntent() {
+        return new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+    }
+    public String getMsg(Context context, String type) {
+        if (type.equals("disabled")) {
+            return context.getString(R.string.msg_gps);
+        } else if (type.equals("JSONException")) {
+            return context.getString(R.string.msg_jsonexception);
+        } else {
+            return "";
+        }
+    }
+    public Intent getMapIntent(Context context, Location location) {
+
+        String query = "z=14";
+        Uri uri = Uri.parse("geo:" + location.getLatitude()+","+location.getLongitude() + "?" + query);
+        Log.d("uri = " + uri.toString());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        //intent.setPackage("com.google.android.apps.maps");
+        /*intent.setPackage("com.nhn.android.nmap");*/
+        return intent;
     }
 }

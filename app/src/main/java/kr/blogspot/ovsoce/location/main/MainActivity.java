@@ -1,6 +1,5 @@
 package kr.blogspot.ovsoce.location.main;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -15,8 +14,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.*;
-import android.os.Process;
+import android.os.Bundle;
+import android.os.Looper;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -139,8 +139,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onProviderDisabled(String provider) {
 
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
+
         Toast.makeText(getBaseContext(), "Gps is turned off!! ",
                 Toast.LENGTH_SHORT).show();
     }
@@ -247,6 +246,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 
@@ -266,6 +266,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+            startActivityForResult(contactPickerIntent, 111);
             return true;
         }
 
@@ -312,4 +315,6 @@ public class MainActivity extends AppCompatActivity
 
         return fragment;
     }
+
+
 }

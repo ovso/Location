@@ -13,11 +13,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.BaseFragment;
@@ -69,10 +73,10 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
                     &&getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
             } else {
-                mLocationManager.removeUpdates(this);
+                removeUpdates();
             }
         } else {
-            mLocationManager.removeUpdates(this);
+            removeUpdates();
         }
     }
 
@@ -84,26 +88,15 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public void initialize() {
         mContentView.findViewById(R.id.btn_find_location).setOnClickListener(this);
+        mContentView.findViewById(R.id.tv_latlng).setOnClickListener(this);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mContentView.findViewById(R.id.tv_address).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_maps).setOnClickListener(this);
     }
 
     @Override
     public void showAddress(String address) {
         ((TextView)mContentView.findViewById(R.id.tv_address)).setText(address);
-        ((TextView)mContentView.findViewById(R.id.tv_address)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //37.4773946,127.0041475
-                Uri gmmIntentUri = Uri.parse("geo:37.4773946,127.0041475");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-
-
-            }
-        });
-
-        hideLoading();
     }
 
     @Override
@@ -111,45 +104,95 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         ((TextView)mContentView.findViewById(R.id.tv_latlng)).setText(latlng);
     }
 
+    @Override
+    public void navigateToGPS(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void removeUpdates() {
+        if(mLocationManager != null) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        &&getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
+                } else {
+                    mLocationManager.removeUpdates(this);
+                }
+            } else {
+                mLocationManager.removeUpdates(this);
+            }
+        }
+        Log.d("removeUpdates");
+    }
+
     private final static int REQUEST_CODE_LOCATION = 0x10;
     @Override
     public void onClick(View v) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
+        if(v.getId() == R.id.btn_find_location) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
+                } else {
+                    showLoading();
+                    mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+                }
             } else {
                 showLoading();
-                mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
+                mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
             }
-        } else {
-            showLoading();
-            mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
+        } else if(v.getId() == R.id.tv_latlng) {
+            //mPresenter.onClickMapView(v, mLocation);
+        } else if(v.getId() == R.id.tv_address) {
+            //mPresenter.onClickMapView(v, mLocation);
+        } else if(v.getId() == R.id.btn_maps) {
+            mPresenter.onClickMapView(v, mLocation);
         }
+    }
+    @Override
+    public void navigateToMap(Intent intent) {
+        startActivity(intent);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    private Location mLocation;
 
     @Override
     public void onLocationChanged(Location location) {
+        mLocation = location;
         Log.d("Lat = " + location.getLatitude() + ", Lon = " + location.getLongitude());
         mPresenter.onLocation(getActivity(), location);
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d("provider = "+provider +", status = " + status + ", extras = " + extras);
+        Log.d("provider = " + provider + ", status = " + status + ", extras = " + extras);
     }
 
     @Override
     public void onProviderEnabled(String provider) {
         Log.d("provider = " + provider);
+        mPresenter.onProvider(getActivity(), "enabled");
     }
 
     @Override
     public void onProviderDisabled(String provider) {
         Log.d("provider = " + provider);
+        mPresenter.onProvider(getActivity(), "disabled");
     }
+
+    public void pickContact(View v) {
+        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+        startActivityForResult(contactPickerIntent, 111);
+    }
+
 }

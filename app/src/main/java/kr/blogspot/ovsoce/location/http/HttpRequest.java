@@ -20,10 +20,12 @@ public class HttpRequest extends AsyncTask<Void, Void, String> {
         public HttpRequest(String url, ResultListener listener) {
             mUrl = url;
             mResultListener = listener;
+            Log.d("url = " + url);
         }
         @Override
         protected String doInBackground(Void... params) {
             HttpURLConnection con = null;
+            StringBuffer buffer = new StringBuffer();
             try {
                 con = (HttpURLConnection) (new URL(mUrl)).openConnection();
                 con.setRequestMethod("GET");
@@ -32,11 +34,11 @@ public class HttpRequest extends AsyncTask<Void, Void, String> {
                 con.connect();
                 InputStream is = con.getInputStream();
                 byte[] b = new byte[1024];
-                StringBuffer buffer = new StringBuffer();
+
                 while ( is.read(b) != -1) {
                     buffer.append(new String(b));
                 }
-                return buffer.toString();
+
             } catch (ProtocolException e) {
                 e.printStackTrace();
             } catch(IOException e) {
@@ -47,8 +49,8 @@ public class HttpRequest extends AsyncTask<Void, Void, String> {
                 if(con != null) {
                     con.disconnect();
                 }
+                return buffer.toString();
             }
-            return null;
         }
 
         @Override

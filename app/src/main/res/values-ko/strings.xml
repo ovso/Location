@@ -8,4 +8,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="msg_gps">위치 정보를 사용해야 합니다.</string>
+    <string name="msg_jsonexception">찾기에 실패했습니다. 다시 찾아주세요.</string>
 </resources>
