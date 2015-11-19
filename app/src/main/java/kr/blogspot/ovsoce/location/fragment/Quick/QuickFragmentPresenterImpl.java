@@ -7,6 +7,7 @@ import android.os.Handler;
 import java.io.IOException;
 
 import kr.blogspot.ovsoce.location.common.Log;
+import kr.blogspot.ovsoce.location.http.HttpRequest;
 
 /**
  * Created by jaeho_oh on 2015-11-16.
@@ -28,8 +29,8 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onLocation(final Context context, final Location location) {
-        String a = mModel.getAddress(context, location);
+        mModel.getAddress(context, location, mView);
+        mView.showLatlng(location.getLatitude()+", "+location.getLongitude());
 
-        //mView.showAddress();
     }
 }

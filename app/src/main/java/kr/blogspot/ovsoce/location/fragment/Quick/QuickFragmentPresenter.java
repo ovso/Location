@@ -8,6 +8,7 @@ import kr.blogspot.ovsoce.location.fragment.FragmentPresenter;
 public interface QuickFragmentPresenter extends FragmentPresenter {
 
     interface View extends FragmentPresenter.View {
-
+        void showAddress(String address);
+        void showLatlng(String latlng);
     }
 }

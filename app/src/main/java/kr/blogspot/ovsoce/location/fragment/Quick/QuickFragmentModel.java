@@ -2,8 +2,14 @@ package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.content.Context;
 import android.location.Location;
+import android.net.Uri;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
@@ -18,14 +24,32 @@ public class QuickFragmentModel extends Model {
         return context.getString(R.string.menu_title_quick_location);
     }
 
-    public String getAddress(final Context context, final Location location){
+    public void getAddress(final Context context, final Location location, final QuickFragmentPresenter.View view){
 
-                //?latlng=37.4773946,127.0041475&sensor=false&language=ko
-        HttpRequest request = new HttpRequest();
-        String response;
-        response = request.req(context.getString(R.string.url_address)+"?latlng=37.4773946,127.0041475&sensor=false&language=ko");
-        Log.d("response = " + response);
+        Uri uri = Uri.parse(context.getString(R.string.url_address)).buildUpon()
+        .appendQueryParameter("latlng", location.getLatitude() + "," + location.getLongitude())
+        .appendQueryParameter("language", "ko").build();
 
-        return null;
+        new HttpRequest(uri.toString(), new HttpRequest.ResultListener() {
+            @Override
+            public void onResult(String result) {
+                view.showAddress(parseJson(result));
+            }
+        }).execute();
+    }
+    private String parseJson(String json) {
+        if(json != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
+                jsonObject = (JSONObject) jsonArray.get(0);
+                return jsonObject.getString("formatted_address");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

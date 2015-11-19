@@ -16,6 +16,5 @@ public interface FragmentPresenter {
         void hideLoading();
         void setTitle(String title);
         void initialize();
-        void showAddress(String address);
     }
 }

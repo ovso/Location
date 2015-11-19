@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -88,7 +90,27 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public void showAddress(String address) {
         ((TextView)mContentView.findViewById(R.id.tv_address)).setText(address);
+        ((TextView)mContentView.findViewById(R.id.tv_address)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //37.4773946,127.0041475
+                Uri gmmIntentUri = Uri.parse("geo:37.4773946,127.0041475");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+
+
+            }
+        });
+
+        hideLoading();
     }
+
+    @Override
+    public void showLatlng(String latlng) {
+        ((TextView)mContentView.findViewById(R.id.tv_latlng)).setText(latlng);
+    }
+
     private final static int REQUEST_CODE_LOCATION = 0x10;
     @Override
     public void onClick(View v) {
@@ -97,11 +119,11 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
             } else {
                 showLoading();
-                mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+                mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
             }
         } else {
             showLoading();
-            mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+            mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
         }
     }
 
@@ -114,8 +136,6 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     public void onLocationChanged(Location location) {
         Log.d("Lat = " + location.getLatitude() + ", Lon = " + location.getLongitude());
         mPresenter.onLocation(getActivity(), location);
-        hideLoading();
-
     }
 
     @Override
