@@ -5,16 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.ContactsContract;
-import android.view.View;
-
-import java.io.IOException;
-
-import kr.blogspot.ovsoce.location.R;
-import kr.blogspot.ovsoce.location.common.Log;
-import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
-import kr.blogspot.ovsoce.location.http.HttpRequest;
 
 /**
  * Created by jaeho_oh on 2015-11-16.
@@ -59,6 +50,11 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     }
 
     @Override
+    public void removeContacts() {
+        mView.addContacts(mModel.removeContacts());
+    }
+
+    @Override
     public void onContactsActivityResult(Context context, Intent data) {
         // Get the URI that points to the selected contact
         Uri contactUri = data.getData();
@@ -79,5 +75,23 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
         String name = cursor.getString(column);
         mView.addContacts(mModel.addContacts(name, number));
+    }
+
+    @Override
+    public void onClickContacts() {
+        if(mModel.getContactsItemArrayListSize()>0) {
+            mView.showRemoveContactsAlert();
+        }
+    }
+
+    @Override
+    public void onClickFindLocation() {
+        mView.findLocation();
+    }
+
+    @Override
+    public void onInputAddContacts(String number) {
+        mView.addContacts(mModel.addContacts(number, number));
+        mView.clearInputContactsEditText();
     }
 }

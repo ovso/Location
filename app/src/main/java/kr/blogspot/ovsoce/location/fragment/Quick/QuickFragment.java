@@ -1,6 +1,7 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,10 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -33,7 +34,7 @@ import kr.blogspot.ovsoce.location.fragment.ContactsItem;
 /**
  * Created by jaeho_oh on 2015-11-16.
  */
-public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener, EditText.OnKeyListener {
+public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener, EditText.OnKeyListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +98,8 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mContentView.findViewById(R.id.tv_address).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_maps).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_add_contacts).setOnClickListener(this);
-        mContentView.findViewById(R.id.tv_contacts).setOnKeyListener(this);
+        mContentView.findViewById(R.id.et_contacts).setOnClickListener(this);
+        mContentView.findViewById(R.id.et_input_contacts).setOnKeyListener(this);
     }
 
     @Override
@@ -141,27 +143,16 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_find_location) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
-                } else {
-                    showLoading();
-                    mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
-                }
-            } else {
-                showLoading();
-                mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
-            }
-        } else if(v.getId() == R.id.tv_latlng) {
-            //mPresenter.onClickMapView(v, mLocation);
-        } else if(v.getId() == R.id.tv_address) {
-            //mPresenter.onClickMapView(v, mLocation);
+            mPresenter.onClickFindLocation();
         } else if(v.getId() == R.id.btn_maps) {
             mPresenter.onClickMapView(mLocation);
         } else if(v.getId() == R.id.btn_add_contacts) {
             mPresenter.onClickAddContacts();
+        } if(v.getId() == R.id.et_contacts) {
+            mPresenter.onClickContacts();
         }
     }
+
     @Override
     public void navigateToMap(Intent intent) {
         startActivity(intent);
@@ -172,7 +163,6 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         startActivityForResult(intent, REQUEST_CODE_PICK_CONTACTS);
     }
 
-/*
     @Override
     public void addContacts(ArrayList<ContactsItem> arrayList) {
         EditText contactsEt = (EditText) mContentView.findViewById(R.id.et_contacts);
@@ -183,17 +173,20 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         }
         contactsEt.setText(sb.toString());
     }
-*/
 
     @Override
-    public void addContacts(ContactsItem item) {
-        TextView contactsEt = (TextView) mContentView.findViewById(R.id.tv_contacts);
-        contactsEt.setText(contactsEt.getText().toString() + ","+item.getName());
-
-        SpannableString content = new SpannableString(contactsEt.getText().toString() + ","+item.getName());
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        contactsEt.setText(content);
-
+    public void findLocation() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
+            } else {
+                showLoading();
+                mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+            }
+        } else {
+            showLoading();
+            mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+        }
     }
 
     @Override
@@ -237,28 +230,35 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        // If the event is a key-down event on the "enter" button
         if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-            Log.d("keyCode = " + keyCode);
+            EditText inputEt = (EditText)mContentView.findViewById(R.id.et_input_contacts);
+            String number = inputEt.getText().toString().trim();
+            mPresenter.onInputAddContacts(number);
         }
         return false;
     }
 
-    /*
-txtUserid.setOnKeyListener(new OnKeyListener() {
-
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-          // If the event is a key-down event on the "enter" button
-          if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-               (keyCode == KeyEvent.KEYCODE_ENTER))
-          {
-                // Perform action on Enter key press
-                txtUserid.clearFocus();
-                txtUserPasword.requestFocus();
-                return true;
-          }
-          return false;
+    @Override
+    public void clearInputContactsEditText() {
+        ((EditText)mContentView.findViewById(R.id.et_input_contacts)).setText("");
     }
-});
-     */
+
+    @Override
+    public void showRemoveContactsAlert() {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(R.string.msg_remove_contacts)
+                .setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.removeContacts();
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+
+    }
 }

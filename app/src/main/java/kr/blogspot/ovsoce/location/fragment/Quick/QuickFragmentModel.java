@@ -92,7 +92,6 @@ public class QuickFragmentModel extends Model {
 
         return intent;
     }
-/*
     private ArrayList<ContactsItem> mContactsItemArrayList = new ArrayList<ContactsItem>();
     public ArrayList<ContactsItem> addContacts(String name, String number) {
 
@@ -103,7 +102,10 @@ public class QuickFragmentModel extends Model {
 
         return mContactsItemArrayList;
     }
-*/
+    public int getContactsItemArrayListSize() {
+        return mContactsItemArrayList.size();
+    }
+/*
     public ContactsItem addContacts(String name, String number) {
 
         ContactsItemImpl item = new ContactsItemImpl();
@@ -111,5 +113,15 @@ public class QuickFragmentModel extends Model {
         item.setNumber(number);
 
         return item;
+    }
+*/
+    public ArrayList<ContactsItem> removeContacts() {
+        if(mContactsItemArrayList.size() > 0) {
+            mContactsItemArrayList.remove(mContactsItemArrayList.size()-1);
+        }
+        return mContactsItemArrayList;
+    }
+    public void clearContacts() {
+        mContactsItemArrayList.clear();
     }
 }

@@ -17,7 +17,11 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
     void onProvider(Context context, String status);
     void onClickMapView(Location location);
     void onClickAddContacts();
+    void removeContacts();
     void onContactsActivityResult(Context context, Intent data);
+    void onClickContacts();
+    void onClickFindLocation();
+    void onInputAddContacts(String number);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);
@@ -26,7 +30,9 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void removeUpdates();
         void navigateToMap(Intent intent);
         void navigateToContacts(Intent intent);
-        //void addContacts(ArrayList<ContactsItem> itemArrayList);
-        void addContacts(ContactsItem item);
+        void addContacts(ArrayList<ContactsItem> itemArrayList);
+        void findLocation();
+        void clearInputContactsEditText();
+        void showRemoveContactsAlert();
     }
 }

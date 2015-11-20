@@ -11,4 +11,7 @@
 
     <string name="msg_gps">You must use the location information.</string>
     <string name="msg_jsonexception">Finding failed. Please look again.</string>
+    <string name="msg_remove_contacts">Contact Deletes one.</string>
+    <string name="text_ok">ok</string>
+    <string name="text_cancel">cancel</string>
 </resources>

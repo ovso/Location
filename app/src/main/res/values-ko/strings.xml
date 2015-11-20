@@ -11,4 +11,7 @@
 
     <string name="msg_gps">위치 정보를 사용해야 합니다.</string>
     <string name="msg_jsonexception">찾기에 실패했습니다. 다시 찾아주세요.</string>
+    <string name="msg_remove_contacts">연락처 하나를 삭제합니다.</string>
+    <string name="text_ok">확인</string>
+    <string name="text_cancel">취소</string>
 </resources>
