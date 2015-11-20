@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.BaseFragment;
@@ -92,6 +94,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mContentView.findViewById(R.id.tv_address).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_maps).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_add_contacts).setOnClickListener(this);
     }
 
     @Override
@@ -152,10 +155,17 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
             //mPresenter.onClickMapView(v, mLocation);
         } else if(v.getId() == R.id.btn_maps) {
             mPresenter.onClickMapView(v, mLocation);
+        } else if(v.getId() == R.id.btn_add_contacts) {
+            mPresenter.onClickAddContacts(v.getContext());
         }
     }
     @Override
     public void navigateToMap(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToContacts(Intent intent) {
         startActivity(intent);
     }
 
@@ -189,10 +199,14 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mPresenter.onProvider(getActivity(), "disabled");
     }
 
-    public void pickContact(View v) {
-        Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(contactPickerIntent, 111);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == getActivity().RESULT_OK) {
+            if(requestCode == REQUEST_CODE_PICK_CONTACTS) {
+                //mPresenter.contactsResult(getActivity(), data);
+                mPresenter.onContactsActivityResult(getActivity(), data);
+            }
+        }
     }
-
 }

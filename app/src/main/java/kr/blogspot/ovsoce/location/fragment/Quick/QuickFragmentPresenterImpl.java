@@ -1,8 +1,12 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.View;
 
 import java.io.IOException;
@@ -47,5 +51,33 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     public void onClickMapView(android.view.View v, Location location) {
 
         mView.navigateToMap(mModel.getMapIntent(v.getContext(), location));
+    }
+
+    @Override
+    public void addContacts(Context context) {
+        mView.navigateToContacts(mModel.getContactsIntent(context));
+    }
+
+    @Override
+    public void onContactsActivityResult(Context context, Intent data) {
+        // Get the URI that points to the selected contact
+        Uri contactUri = data.getData();
+        // We only need the NUMBER column, because there will be only one row in the result
+        String[] projection = {ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+
+        // Perform the query on the contact to get the NUMBER column
+        // We don't need a selection or sort order (there's only one result for the given URI)
+        // CAUTION: The query() method should be called from a separate thread to avoid blocking
+        // your app's UI thread. (For simplicity of the sample, this code doesn't do that.)
+        // Consider using CursorLoader to perform the query.
+        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
+        cursor.moveToFirst();
+
+        // Retrieve the phone number from the NUMBER column
+        int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+        //mView.setNumber(cursor.getString(column));
+
+        column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+        //mView.setName(cursor.getString(column));
     }
 }

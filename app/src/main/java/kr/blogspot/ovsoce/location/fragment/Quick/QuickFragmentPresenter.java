@@ -13,6 +13,8 @@ import kr.blogspot.ovsoce.location.fragment.FragmentPresenter;
 public interface QuickFragmentPresenter extends FragmentPresenter {
     void onProvider(Context context, String status);
     void onClickMapView(android.view.View v, Location location);
+    void onClickAddContacts(Context context);
+    void onContactsActivityResult(Context context, Intent data);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);
@@ -20,5 +22,6 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void showToast(String msg);
         void removeUpdates();
         void navigateToMap(Intent intent);
+        void navigateToContacts(Intent intent);
     }
 }

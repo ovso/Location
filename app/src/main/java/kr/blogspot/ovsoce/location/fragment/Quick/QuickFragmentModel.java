@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 
 import org.json.JSONArray;
@@ -101,6 +102,13 @@ public class QuickFragmentModel extends Model {
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         //intent.setPackage("com.google.android.apps.maps");
         /*intent.setPackage("com.nhn.android.nmap");*/
+        return intent;
+    }
+    public Intent getContactsIntent(Context context) {
+        Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+
         return intent;
     }
 }
