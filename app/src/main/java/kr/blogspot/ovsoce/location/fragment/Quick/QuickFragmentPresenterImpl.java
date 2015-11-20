@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
+import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
 import kr.blogspot.ovsoce.location.http.HttpRequest;
 
 /**
@@ -48,14 +49,13 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     }
 
     @Override
-    public void onClickMapView(android.view.View v, Location location) {
-
-        mView.navigateToMap(mModel.getMapIntent(v.getContext(), location));
+    public void onClickMapView(Location location) {
+        mView.navigateToMap(mModel.getMapIntent(location));
     }
 
     @Override
-    public void addContacts(Context context) {
-        mView.navigateToContacts(mModel.getContactsIntent(context));
+    public void onClickAddContacts() {
+        mView.navigateToContacts(mModel.getContactsIntent());
     }
 
     @Override
@@ -75,9 +75,9 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
         // Retrieve the phone number from the NUMBER column
         int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-        //mView.setNumber(cursor.getString(column));
-
+        String number = cursor.getString(column);
         column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-        //mView.setName(cursor.getString(column));
+        String name = cursor.getString(column);
+        mView.addContacts(mModel.addContacts(name, number));
     }
 }

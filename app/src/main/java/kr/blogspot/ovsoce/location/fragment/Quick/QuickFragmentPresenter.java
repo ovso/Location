@@ -3,8 +3,11 @@ package kr.blogspot.ovsoce.location.fragment.Quick;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.view.View;
 
+import java.util.ArrayList;
+
+import kr.blogspot.ovsoce.location.fragment.ContactsItem;
+import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
 import kr.blogspot.ovsoce.location.fragment.FragmentPresenter;
 
 /**
@@ -12,8 +15,8 @@ import kr.blogspot.ovsoce.location.fragment.FragmentPresenter;
  */
 public interface QuickFragmentPresenter extends FragmentPresenter {
     void onProvider(Context context, String status);
-    void onClickMapView(android.view.View v, Location location);
-    void onClickAddContacts(Context context);
+    void onClickMapView(Location location);
+    void onClickAddContacts();
     void onContactsActivityResult(Context context, Intent data);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
@@ -23,5 +26,7 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void removeUpdates();
         void navigateToMap(Intent intent);
         void navigateToContacts(Intent intent);
+        //void addContacts(ArrayList<ContactsItem> itemArrayList);
+        void addContacts(ContactsItem item);
     }
 }

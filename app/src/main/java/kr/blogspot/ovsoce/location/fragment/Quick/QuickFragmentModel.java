@@ -1,6 +1,5 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -12,10 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
+import kr.blogspot.ovsoce.location.fragment.ContactsItem;
+import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
 import kr.blogspot.ovsoce.location.http.HttpRequest;
-import kr.blogspot.ovsoce.location.http.HttpRequestThread;
 import kr.blogspot.ovsoce.location.main.Model;
 
 /**
@@ -44,27 +46,6 @@ public class QuickFragmentModel extends Model {
                 view.hideLoading();
             }
         }).execute();
-
-/*
-        new HttpRequestThread(uri.toString(), new HttpRequest.ResultListener() {
-            @Override
-            public void onResult(String result) {
-                final String address = parseJson(result);
-                Activity activity = (Activity) context;
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (address != null) {
-                            view.showAddress(address);
-                        } else {
-                            view.showToast(getMsg(context, "JSONException"));
-                        }
-                        view.hideLoading();
-                    }
-                });
-            }
-        }).start();
-*/
     }
     private String parseJson(String json) {
         if(json != null) {
@@ -93,7 +74,7 @@ public class QuickFragmentModel extends Model {
             return "";
         }
     }
-    public Intent getMapIntent(Context context, Location location) {
+    public Intent getMapIntent(Location location) {
 
         String query = "z=14";
         Uri uri = Uri.parse("geo:" + location.getLatitude()+","+location.getLongitude() + "?" + query);
@@ -104,11 +85,31 @@ public class QuickFragmentModel extends Model {
         /*intent.setPackage("com.nhn.android.nmap");*/
         return intent;
     }
-    public Intent getContactsIntent(Context context) {
+    public Intent getContactsIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
 
         return intent;
+    }
+/*
+    private ArrayList<ContactsItem> mContactsItemArrayList = new ArrayList<ContactsItem>();
+    public ArrayList<ContactsItem> addContacts(String name, String number) {
+
+        ContactsItemImpl item = new ContactsItemImpl();
+        item.setName(name);
+        item.setNumber(number);
+        mContactsItemArrayList.add(item);
+
+        return mContactsItemArrayList;
+    }
+*/
+    public ContactsItem addContacts(String name, String number) {
+
+        ContactsItemImpl item = new ContactsItemImpl();
+        item.setName(name);
+        item.setNumber(number);
+
+        return item;
     }
 }
