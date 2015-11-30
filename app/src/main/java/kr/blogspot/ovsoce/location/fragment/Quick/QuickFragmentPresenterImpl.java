@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-/**
- * Created by jaeho_oh on 2015-11-16.
- */
+import kr.blogspot.ovsoce.location.R;
+
 public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     private QuickFragmentPresenter.View mView;
     private QuickFragmentModel mModel;
@@ -67,14 +67,17 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         // your app's UI thread. (For simplicity of the sample, this code doesn't do that.)
         // Consider using CursorLoader to perform the query.
         Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
-        cursor.moveToFirst();
+        if(cursor != null) {
+            cursor.moveToFirst();
+            // Retrieve the phone number from the NUMBER column
+            int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            String number = cursor.getString(column);
+            column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            String name = cursor.getString(column);
+            mView.addContacts(mModel.addContacts(name, number));
+            cursor.close();
+        }
 
-        // Retrieve the phone number from the NUMBER column
-        int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-        String number = cursor.getString(column);
-        column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-        String name = cursor.getString(column);
-        mView.addContacts(mModel.addContacts(name, number));
     }
 
     @Override
@@ -86,12 +89,22 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onClickFindLocation() {
-        mView.findLocation();
+        mView.findLocation(mModel.getLocationProvider());
+        mView.clearAddressLatLng();
     }
 
     @Override
     public void onInputAddContacts(String number) {
         mView.addContacts(mModel.addContacts(number, number));
         mView.clearInputContactsEditText();
+    }
+
+    @Override
+    public void onCheckedProvider(int checkedId) {
+        if(checkedId == R.id.radio_network) {
+            mModel.setLocationProvider(LocationManager.NETWORK_PROVIDER);
+        } else if(checkedId == R.id.radio_gps) {
+            mModel.setLocationProvider(LocationManager.GPS_PROVIDER);
+        }
     }
 }

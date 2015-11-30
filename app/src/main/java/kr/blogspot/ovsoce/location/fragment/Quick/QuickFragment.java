@@ -14,13 +14,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.widget.Toolbar;
-import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ import kr.blogspot.ovsoce.location.fragment.ContactsItem;
 /**
  * Created by jaeho_oh on 2015-11-16.
  */
-public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener, EditText.OnKeyListener{
+public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener, EditText.OnKeyListener, RadioGroup.OnCheckedChangeListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,7 +93,6 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     private LocationManager mLocationManager;
     @Override
     public void initialize() {
-        mContentView.findViewById(R.id.btn_find_location).setOnClickListener(this);
         mContentView.findViewById(R.id.tv_latlng).setOnClickListener(this);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mContentView.findViewById(R.id.tv_address).setOnClickListener(this);
@@ -100,6 +100,12 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mContentView.findViewById(R.id.btn_add_contacts).setOnClickListener(this);
         mContentView.findViewById(R.id.et_contacts).setOnClickListener(this);
         mContentView.findViewById(R.id.et_input_contacts).setOnKeyListener(this);
+
+        final RadioGroup radioGroup = (RadioGroup) mContentView.findViewById(R.id.radiogroup_location_provider);
+        radioGroup.setOnCheckedChangeListener(this);
+        radioGroup.getChildAt(0).setOnClickListener(this);
+        radioGroup.getChildAt(1).setOnClickListener(this);
+        radioGroup.check(radioGroup.getChildAt(0).getId());
     }
 
     @Override
@@ -142,14 +148,14 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     private final static int REQUEST_CODE_LOCATION = 0x10;
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_find_location) {
-            mPresenter.onClickFindLocation();
-        } else if(v.getId() == R.id.btn_maps) {
+        if(v.getId() == R.id.btn_maps) {
             mPresenter.onClickMapView(mLocation);
         } else if(v.getId() == R.id.btn_add_contacts) {
             mPresenter.onClickAddContacts();
-        } if(v.getId() == R.id.et_contacts) {
+        } else if(v.getId() == R.id.et_contacts) {
             mPresenter.onClickContacts();
+        } else if(v.getId() == R.id.radio_network || v.getId() == R.id.radio_gps) {
+            mPresenter.onClickFindLocation();
         }
     }
 
@@ -175,17 +181,18 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     }
 
     @Override
-    public void findLocation() {
+    public void findLocation(String locationProvider) {
+        Log.d("locationProvider = " + locationProvider);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION);
             } else {
                 showLoading();
-                mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+                mLocationManager.requestSingleUpdate(locationProvider, this, Looper.myLooper());
             }
         } else {
             showLoading();
-            mLocationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, Looper.myLooper());
+            mLocationManager.requestSingleUpdate(locationProvider, this, Looper.myLooper());
         }
     }
 
@@ -193,6 +200,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     private Location mLocation;
 
     @Override
@@ -259,6 +267,21 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
                         dialog.dismiss();
                     }
                 }).show();
+    }
 
+    @Override
+    public void clearAddressLatLng() {
+        ((TextView)mContentView.findViewById(R.id.tv_address)).setText(null);
+        ((TextView)mContentView.findViewById(R.id.tv_latlng)).setText(null);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        group.setOnCheckedChangeListener(null);
+        group.clearCheck();
+        group.check(checkedId);
+        group.setOnCheckedChangeListener(this);
+        mPresenter.onCheckedProvider(checkedId);
+        Log.d("check");
     }
 }

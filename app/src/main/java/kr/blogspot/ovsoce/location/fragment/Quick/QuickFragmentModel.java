@@ -27,7 +27,6 @@ public class QuickFragmentModel extends Model {
     public String getTitle(Context context) {
         return context.getString(R.string.menu_title_quick_location);
     }
-
     public void getAddress(final Context context, final Location location, final QuickFragmentPresenter.View view){
 
         Uri uri = Uri.parse(context.getString(R.string.url_address)).buildUpon()
@@ -105,16 +104,6 @@ public class QuickFragmentModel extends Model {
     public int getContactsItemArrayListSize() {
         return mContactsItemArrayList.size();
     }
-/*
-    public ContactsItem addContacts(String name, String number) {
-
-        ContactsItemImpl item = new ContactsItemImpl();
-        item.setName(name);
-        item.setNumber(number);
-
-        return item;
-    }
-*/
     public ArrayList<ContactsItem> removeContacts() {
         if(mContactsItemArrayList.size() > 0) {
             mContactsItemArrayList.remove(mContactsItemArrayList.size()-1);
@@ -123,5 +112,12 @@ public class QuickFragmentModel extends Model {
     }
     public void clearContacts() {
         mContactsItemArrayList.clear();
+    }
+    private String mLocationProvider = null;
+    public void setLocationProvider(String provider) {
+        mLocationProvider = provider;
+    }
+    public String getLocationProvider() {
+        return mLocationProvider;
     }
 }

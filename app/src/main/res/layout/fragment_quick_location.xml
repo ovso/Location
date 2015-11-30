@@ -23,7 +23,7 @@
             android:id="@+id/btn_add_contacts"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="+"/>
+            android:text="add"/>
     </LinearLayout>
 
     <EditText
@@ -33,30 +33,60 @@
         android:ems="10"
         android:id="@+id/et_input_contacts" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="maps"
-        android:id="@+id/btn_maps"
-        android:layout_gravity="right" />
-
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textStyle="bold|italic" />
     <TextView
         android:id="@+id/tv_latlng"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/btn_find_location"
+        android:layout_height="wrap_content"
+        android:textStyle="bold|italic"/>
+    <ImageButton
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="위경도 찾기" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_room"
+        android:id="@+id/btn_maps" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RadioGroup
+            android:id="@+id/radiogroup_location_provider"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/radio_network"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_light"
+                android:text="Network(실내-외)"
+                android:textStyle="bold"/>
+
+            <RadioButton
+                android:id="@+id/radio_gps"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/holo_blue_light"
+                android:text="GPS(실외)"
+                android:textStyle="bold" />
+        </RadioGroup>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_send" />
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_share" />
+
 </LinearLayout>
