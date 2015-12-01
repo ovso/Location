@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="url_address">http://maps.googleapis.com/maps/api/geocode/json?</string>
+    <string name="intent_filter_sms_sent_action">kr.blogspot.ovsoce.location.sms.sent.action</string>
+    <string name="intent_filter_sms_delivered_action">kr.blogspot.ovsoce.location.sms.delivered.action</string>
 </resources>

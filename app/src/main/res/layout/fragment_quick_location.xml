@@ -10,7 +10,7 @@
         <EditText
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="phone"
             android:ems="10"
             android:id="@+id/et_contacts"
@@ -18,30 +18,45 @@
             android:focusableInTouchMode="false"
             android:longClickable="false"
             android:scrollbars="horizontal"
+            android:hint="@string/text_import_contacts"
             />
-        <Button
+        <ImageButton
             android:id="@+id/btn_add_contacts"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="add"/>
+            android:src="@drawable/ic_social_person_add"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:inputType="phone"
+            android:ems="10"
+            android:id="@+id/et_input_contacts"
+            android:hint="@string/text_contacts_writing"/>
+        <ImageButton
+            android:id="@+id/btn_add_contacts_writing"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_editor_border_color"/>
     </LinearLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/et_input_contacts" />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:textStyle="bold|italic" />
     <TextView
         android:id="@+id/tv_latlng"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:textStyle="bold|italic"/>
     <ImageButton
         android:layout_width="match_parent"
@@ -83,8 +98,10 @@
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_send" />
+        android:src="@android:drawable/ic_menu_send"
+        android:id="@+id/btn_sms" />
     <ImageButton
+        android:id="@+id/btn_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_share" />

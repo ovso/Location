@@ -1,5 +1,6 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,8 +8,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.telephony.SmsManager;
+import android.text.TextUtils;
 
 import kr.blogspot.ovsoce.location.R;
+import kr.blogspot.ovsoce.location.common.Log;
 
 public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     private QuickFragmentPresenter.View mView;
@@ -27,12 +31,13 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onLocation(final Context context, final Location location) {
-        mModel.getAddress(context, location, mView);
+        mModel.findAddress(context, location, mView);
         mView.showLatlng(location.getLatitude()+", "+location.getLongitude());
     }
 
     @Override
     public void onProvider(Context context, String status) {
+        Log.d("status = " + status);
         if(status.equals("disabled")) {
             mView.showToast(mModel.getMsg(context, status));
             mView.navigateToGPS(mModel.getGPSIntent());
@@ -40,8 +45,13 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     }
 
     @Override
-    public void onClickMapView(Location location) {
-        mView.navigateToMap(mModel.getMapIntent(location));
+    public void onClickMapView(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            mView.navigateToMap(mModel.getMapIntent());
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
     }
 
     @Override
@@ -89,14 +99,19 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onClickFindLocation() {
-        mView.findLocation(mModel.getLocationProvider());
         mView.clearAddressLatLng();
+        mModel.removeLocation();
+        mView.findLocation(mModel.getLocationProvider());
     }
 
     @Override
-    public void onInputAddContacts(String number) {
-        mView.addContacts(mModel.addContacts(number, number));
-        mView.clearInputContactsEditText();
+    public void onInputAddContacts(Context context, String number) {
+        if(!TextUtils.isEmpty(number)) {
+            mView.addContacts(mModel.addContacts(number, number));
+            mView.clearInputContactsEditText();
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyInputNumber"));
+        }
     }
 
     @Override
@@ -106,5 +121,38 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         } else if(checkedId == R.id.radio_gps) {
             mModel.setLocationProvider(LocationManager.GPS_PROVIDER);
         }
+    }
+
+    @Override
+    public void onClickShare(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            mView.navigateToShare(mModel.getShareIntent(context));
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
+    }
+
+    @Override
+    public void onClickSMS(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            if(mModel.getContactsItemArrayListSize()>0) {
+                mView.showSMSDialog(mModel.getFullTextToShare(context));
+            } else {
+                mView.showToast(mModel.getMsg(context,"emptyInputNumber"));
+            }
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
+    }
+
+    @Override
+    public void sentSMS(Context context) {
+        PendingIntent sentIntent = PendingIntent.getBroadcast(context, 0, new Intent("SMS_SENT_ACTION"), 0);
+        PendingIntent deliveredIntent = PendingIntent.getBroadcast(context, 0, new Intent("SMS_DELIVERED_ACTION"), 0);
+
+        SmsManager mSmsManager = SmsManager.getDefault();
+        mSmsManager.sendTextMessage("01068130432", null, "sendTextMessage", sentIntent, deliveredIntent);
     }
 }

@@ -10,8 +10,14 @@
     <string name="action_settings">Settings</string>
 
     <string name="msg_gps">위치 정보를 사용해야 합니다.</string>
-    <string name="msg_jsonexception">주소찾기를 실패했습니다. 위치공유는 가능합니다.</string>
+    <string name="msg_empty_location">위치를 찾아주세요.</string>
+    <string name="msg_fail_address">주소찾기에 실패했습니다. 위치공유는 가능합니다.</string>
     <string name="msg_remove_contacts">연락처 하나를 삭제합니다.</string>
+    <string name="msg_empty_input_number">번호를 입력하세요.</string>
     <string name="text_ok">확인</string>
     <string name="text_cancel">취소</string>
+    <string name="text_import_contacts">연락처 가져오기(SMS)</string>
+    <string name="text_contacts_writing">연락처 쓰기(SMS)</string>
+    <string name="text_send">보내기</string>
+    <string name="text_sms_send">문자 보내기</string>
 </resources>

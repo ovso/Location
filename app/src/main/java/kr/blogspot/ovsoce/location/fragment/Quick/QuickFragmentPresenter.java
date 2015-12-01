@@ -15,14 +15,17 @@ import kr.blogspot.ovsoce.location.fragment.FragmentPresenter;
  */
 public interface QuickFragmentPresenter extends FragmentPresenter {
     void onProvider(Context context, String status);
-    void onClickMapView(Location location);
+    void onClickMapView(Context context);
     void onClickAddContacts();
     void removeContacts();
     void onContactsActivityResult(Context context, Intent data);
     void onClickContacts();
     void onClickFindLocation();
-    void onInputAddContacts(String number);
+    void onInputAddContacts(Context context, String number);
     void onCheckedProvider(int checkedId);
+    void onClickShare(Context context);
+    void onClickSMS(Context context);
+    void sentSMS(Context context);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);
@@ -31,10 +34,12 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void removeUpdates();
         void navigateToMap(Intent intent);
         void navigateToContacts(Intent intent);
+        void navigateToShare(Intent intent);
         void addContacts(ArrayList<ContactsItem> itemArrayList);
         void findLocation(String locationProvider);
         void clearInputContactsEditText();
         void showRemoveContactsAlert();
         void clearAddressLatLng();
+        void showSMSDialog(String message);
     }
 }

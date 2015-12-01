@@ -7,17 +7,12 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -39,7 +34,7 @@ import kr.blogspot.ovsoce.location.fragment.Exact.ExactFragment;
 import kr.blogspot.ovsoce.location.fragment.Quick.QuickFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LocationListener, MainPresenter.View {
+        implements NavigationView.OnNavigationItemSelectedListener, MainPresenter.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,33 +61,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-/*        findViewById(R.id.nav_quick).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-                    checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, Process.myPid(), Process.myUid());;
-                    if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0x12);
-                    } else {
-                        findLocation();
-                    }
-                }
-            }
-        });
-        findViewById(R.id.nav_quick).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FIND_LOCATION);
-                    } else {
-                        doSend();
-                    }
-                } else {
-                    doSend();
-                }
-            }
-        });*/
 
         mPresenter = new MainPresenterImpl(this);
         mPresenter.init(getApplicationContext());
@@ -101,64 +69,6 @@ public class MainActivity extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_quick));
     }
     private MainPresenter mPresenter;
-    private void findLocation(){
-        mProgressDialog = ProgressDialog.show(this, "d", "d");
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                dialog.dismiss();
-                mLocationManager.removeUpdates(MainActivity.this);
-            }
-        });
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1, this);
-        //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 1, this);
-
-        mLocationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, Looper.myLooper());
-
-        // checkPermission~~~~
-    }
-    ProgressDialog mProgressDialog;
-    private LocationManager mLocationManager;
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        String msg = "Latitude: " + location.getLatitude()
-                + ", Longitude: " + location.getLongitude();
-
-        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
-        Log.d("MainActivity", msg);
-
-        mLocationManager.removeUpdates(this);
-        mProgressDialog.dismiss();
-    }
-    //http://maps.googleapis.com/maps/api/geocode/json?latlng=35.1640229,129.1567976&sensor=false&language=ko
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-
-        Toast.makeText(getBaseContext(), "Gps is turned off!! ",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-        Toast.makeText(getBaseContext(), "Gps is turned on!! ",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
-        //Toast.makeText(getApplicationContext(), ""+status, Toast.LENGTH_SHORT).show();
-        Log.d("MainActivity", "provider = " + provider);
-        Log.d("MainActivity", "status = " + status);
-        Log.d("MainActivity", "extras = " + extras);
-    }
 
     private final static int MY_PERMISSIONS_REQUEST_SEND_SMS = 0x10;
     private final static int MY_PERMISSIONS_REQUEST_ACCESS_FIND_LOCATION = 0x11;
@@ -181,8 +91,6 @@ public class MainActivity extends AppCompatActivity
                 }
 
         }
-
-
     }
 
     private void doSend() {
@@ -196,7 +104,6 @@ public class MainActivity extends AppCompatActivity
                 switch(getResultCode()){
                     case Activity.RESULT_OK:
                         // 전송 성공
-
                         Toast.makeText(mContext, "전송 완료", Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
@@ -246,7 +153,6 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-
         }
     }
 
@@ -315,6 +221,4 @@ public class MainActivity extends AppCompatActivity
 
         return fragment;
     }
-
-
 }

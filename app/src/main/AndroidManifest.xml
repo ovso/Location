@@ -24,6 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".receiver.SMSSentReceiver">
+            <intent-filter>
+                <action android:name="kr.blogspot.ovsoce.location.sms.sent.action"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.SMSDeliveredReceiver">
+            <intent-filter>
+                <action android:name="kr.blogspot.ovsoce.location.sms.delivered.action"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -100,6 +100,9 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mContentView.findViewById(R.id.btn_add_contacts).setOnClickListener(this);
         mContentView.findViewById(R.id.et_contacts).setOnClickListener(this);
         mContentView.findViewById(R.id.et_input_contacts).setOnKeyListener(this);
+        mContentView.findViewById(R.id.btn_share).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_add_contacts_writing).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_sms).setOnClickListener(this);
 
         final RadioGroup radioGroup = (RadioGroup) mContentView.findViewById(R.id.radiogroup_location_provider);
         radioGroup.setOnCheckedChangeListener(this);
@@ -149,13 +152,22 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_maps) {
-            mPresenter.onClickMapView(mLocation);
+            mPresenter.onClickMapView(v.getContext());
         } else if(v.getId() == R.id.btn_add_contacts) {
             mPresenter.onClickAddContacts();
         } else if(v.getId() == R.id.et_contacts) {
             mPresenter.onClickContacts();
         } else if(v.getId() == R.id.radio_network || v.getId() == R.id.radio_gps) {
             mPresenter.onClickFindLocation();
+        } else if(v.getId() == R.id.btn_share) {
+            String address = ((TextView)mContentView.findViewById(R.id.tv_address)).getText().toString().trim();
+            mPresenter.onClickShare(v.getContext());
+        } else if(v.getId() == R.id.btn_add_contacts_writing) {
+            EditText inputEt = (EditText)mContentView.findViewById(R.id.et_input_contacts);
+            String number = inputEt.getText().toString().trim();
+            mPresenter.onInputAddContacts(v.getContext(), number);
+        } else if(v.getId() == R.id.btn_sms) {
+            mPresenter.onClickSMS(v.getContext());
         }
     }
 
@@ -167,6 +179,11 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public void navigateToContacts(Intent intent) {
         startActivityForResult(intent, REQUEST_CODE_PICK_CONTACTS);
+    }
+
+    @Override
+    public void navigateToShare(Intent intent) {
+        startActivity(intent);
     }
 
     @Override
@@ -201,11 +218,11 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private Location mLocation;
+    //private Location mLocation;
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocation = location;
+        //mLocation = location;
         Log.d("Lat = " + location.getLatitude() + ", Lon = " + location.getLongitude());
         mPresenter.onLocation(getActivity(), location);
     }
@@ -241,7 +258,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
             EditText inputEt = (EditText)mContentView.findViewById(R.id.et_input_contacts);
             String number = inputEt.getText().toString().trim();
-            mPresenter.onInputAddContacts(number);
+            mPresenter.onInputAddContacts(v.getContext(), number);
         }
         return false;
     }
@@ -273,6 +290,27 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     public void clearAddressLatLng() {
         ((TextView)mContentView.findViewById(R.id.tv_address)).setText(null);
         ((TextView)mContentView.findViewById(R.id.tv_latlng)).setText(null);
+    }
+
+    @Override
+    public void showSMSDialog(String message) {
+        new AlertDialog.Builder(getActivity())
+                .setPositiveButton(R.string.text_send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        mPresenter.sentSMS(getActivity());
+                    }
+                })
+                .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setTitle(R.string.text_sms_send)
+                .setMessage(message)
+                .show();
     }
 
     @Override
