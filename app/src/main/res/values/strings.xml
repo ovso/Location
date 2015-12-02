@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Exact location transfer</string>
+    <string name="app_name">Fast location transfer</string>
 
     <string name="menu_title_quick_location">Quick Location</string>
     <string name="menu_title_exact_location">Exact Location</string>
@@ -20,4 +20,7 @@
     <string name="text_contacts_writing">Contacts writing(SMS)</string>
     <string name="text_send">send</string>
     <string name="text_sms_send">Send SMS</string>
+    <string name="text_119">119 of Korea\nFire,Rescue,Emergency,Disaster</string>
+    <string name="text_112">112 of Korea\nCrime</string>
+    <string name="text_emergency">All obligations of sms sent is for you !!</string>
 </resources>

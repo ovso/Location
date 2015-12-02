@@ -61,7 +61,7 @@
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_room"
+        android:src="@drawable/ic_launcher"
         android:id="@+id/btn_maps" />
     <FrameLayout
         android:layout_width="match_parent"
@@ -95,11 +95,40 @@
             android:background="@android:color/white"
             android:layout_gravity="center"/>
     </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_send"
         android:id="@+id/btn_sms" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btn_112"
+            android:text="@string/text_112"
+            android:textStyle="bold"
+            android:maxLines="2"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/btn_119"
+            android:text="@string/text_119"
+            android:textStyle="bold"
+            android:maxLines="2"/>
+    </LinearLayout>
+
     <ImageButton
         android:id="@+id/btn_share"
         android:layout_width="match_parent"

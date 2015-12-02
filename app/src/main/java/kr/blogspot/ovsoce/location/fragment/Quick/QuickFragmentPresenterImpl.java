@@ -32,7 +32,7 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     @Override
     public void onLocation(final Context context, final Location location) {
         mModel.findAddress(context, location, mView);
-        mView.showLatlng(location.getLatitude()+", "+location.getLongitude());
+        mView.showLatlng(location.getLatitude() + ", " + location.getLongitude());
     }
 
     @Override
@@ -138,7 +138,7 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         Location location = mModel.getLocation();
         if(location != null) {
             if(mModel.getContactsItemArrayListSize()>0) {
-                mView.showSMSDialog(mModel.getFullTextToShare(context));
+                mView.showSMSDialog(mModel.getFullTextToShare(context),context.getString(R.string.target_generic));
             } else {
                 mView.showToast(mModel.getMsg(context,"emptyInputNumber"));
             }
@@ -148,11 +148,53 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     }
 
     @Override
-    public void sentSMS(Context context) {
-        PendingIntent sentIntent = PendingIntent.getBroadcast(context, 0, new Intent("SMS_SENT_ACTION"), 0);
-        PendingIntent deliveredIntent = PendingIntent.getBroadcast(context, 0, new Intent("SMS_DELIVERED_ACTION"), 0);
+    public void sendSMS(Context context, String target) {
+        String[] numbers = null;
+        if(target.equals(context.getString(R.string.target_generic))) {
+            numbers =  new String[mModel.getContactsItemArrayListSize()];
+            for (int i = 0; i < mModel.getContactsItemArrayListSize(); i++) {
+                numbers[i] = mModel.getContactsItemArrayList().get(i).getNumber();
+            }
+            fireSMS(context, numbers);
+        } else if(target.equals(context.getString(R.string.target_112)) || target.equals(context.getString(R.string.target_119))) {
+            numbers =  new String[]{mModel.getTargetNumber(context, target)};
+            fireSMS(context, numbers);
+        }
+    }
+    private PendingIntent mSentPendingIntent = null;
+    private PendingIntent mDeliveredPendingIntent = null;
+    private void fireSMS(Context context, String[] numbers) {
+        if( mSentPendingIntent == null) {
+            mSentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
+        }
+        if( mDeliveredPendingIntent == null) {
+            mDeliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
+        }
 
         SmsManager mSmsManager = SmsManager.getDefault();
-        mSmsManager.sendTextMessage("01068130432", null, "sendTextMessage", sentIntent, deliveredIntent);
+
+        for (int i = 0; i < numbers.length; i++) {
+            mSmsManager.sendTextMessage(numbers[i], null, mModel.getFullTextToShare(context), mSentPendingIntent, mDeliveredPendingIntent);
+        }
+    }
+
+    @Override
+    public void onClick112(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            mView.showSMSDialog(mModel.getFullTextToShareEmergency(context), context.getString(R.string.target_112));
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
+    }
+
+    @Override
+    public void onClick119(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            mView.showSMSDialog(mModel.getFullTextToShareEmergency(context), context.getString(R.string.target_119));
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
     }
 }

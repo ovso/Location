@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">정확한 내 위치 전송</string>
+    <string name="app_name">빠른위치전송</string>
 
     <string name="menu_title_quick_location">빠른 내 위치</string>
     <string name="menu_title_exact_location">정확한 내 위치</string>
@@ -20,4 +20,7 @@
     <string name="text_contacts_writing">연락처 쓰기(SMS)</string>
     <string name="text_send">보내기</string>
     <string name="text_sms_send">문자 보내기</string>
+    <string name="text_119">119\n화재,구조,구급,재난</string>
+    <string name="text_112">112\n범죄신고</string>
+    <string name="text_emergency">*** 긴급 문자 발송의 모든 책임은 본인에게 있습니다. ***</string>
 </resources>

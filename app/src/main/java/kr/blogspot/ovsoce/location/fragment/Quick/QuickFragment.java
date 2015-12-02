@@ -18,9 +18,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +101,8 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mContentView.findViewById(R.id.btn_share).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_add_contacts_writing).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_sms).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_112).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_119).setOnClickListener(this);
 
         final RadioGroup radioGroup = (RadioGroup) mContentView.findViewById(R.id.radiogroup_location_provider);
         radioGroup.setOnCheckedChangeListener(this);
@@ -167,10 +167,32 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
             String number = inputEt.getText().toString().trim();
             mPresenter.onInputAddContacts(v.getContext(), number);
         } else if(v.getId() == R.id.btn_sms) {
-            mPresenter.onClickSMS(v.getContext());
+            if(checkSendSMSPermission()) {
+                mPresenter.onClickSMS(v.getContext());
+            }
+        } else if(v.getId() == R.id.btn_112) {
+            if(checkSendSMSPermission()) {
+                mPresenter.onClick112(v.getContext());
+            }
+        } else if(v.getId() == R.id.btn_119) {
+            if(checkSendSMSPermission()) {
+                mPresenter.onClick119(v.getContext());
+            }
         }
     }
-
+    private final static int REQUEST_CODE_SEND_SMS = 0x11;
+    private boolean checkSendSMSPermission() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (getActivity().checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, REQUEST_CODE_SEND_SMS);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
     @Override
     public void navigateToMap(Intent intent) {
         startActivity(intent);
@@ -293,13 +315,13 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     }
 
     @Override
-    public void showSMSDialog(String message) {
+    public void showSMSDialog(String message, final String target) {
         new AlertDialog.Builder(getActivity())
                 .setPositiveButton(R.string.text_send, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        mPresenter.sentSMS(getActivity());
+                        mPresenter.sendSMS(getActivity(), target);
                     }
                 })
                 .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {

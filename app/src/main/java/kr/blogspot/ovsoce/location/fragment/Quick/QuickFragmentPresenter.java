@@ -25,7 +25,9 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
     void onCheckedProvider(int checkedId);
     void onClickShare(Context context);
     void onClickSMS(Context context);
-    void sentSMS(Context context);
+    void sendSMS(Context context, String target);
+    void onClick112(Context context);
+    void onClick119(Context context);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);
@@ -40,6 +42,6 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void clearInputContactsEditText();
         void showRemoveContactsAlert();
         void clearAddressLatLng();
-        void showSMSDialog(String message);
+        void showSMSDialog(String message, String target);
     }
 }

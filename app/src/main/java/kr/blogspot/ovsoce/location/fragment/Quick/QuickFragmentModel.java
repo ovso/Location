@@ -30,6 +30,8 @@ public class QuickFragmentModel extends Model {
     }
     private String mAddress = null;
     private Location mLocation = null;
+    // 주소로 주소, 경위도 찾기
+    //http://maps.googleapis.com/maps/api/geocode/json?address=%ED%9A%A8%EB%A0%B9%EB%A1%9C%20237&sensor=true&region=ko&language=ko
     public void findAddress(final Context context, final Location location, final QuickFragmentPresenter.View view){
         mLocation = location;
 
@@ -121,6 +123,9 @@ public class QuickFragmentModel extends Model {
 
         return mContactsItemArrayList;
     }
+    public ArrayList<ContactsItem> getContactsItemArrayList() {
+        return mContactsItemArrayList;
+    }
     public int getContactsItemArrayListSize() {
         return mContactsItemArrayList.size();
     }
@@ -143,7 +148,6 @@ public class QuickFragmentModel extends Model {
     public Intent getShareIntent(Context context) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        //intent.putExtra(Intent.EXTRA_SUBJECT, "- "+context.getString(R.string.app_name));
         intent.putExtra(Intent.EXTRA_TEXT, getFullTextToShare(context));
         intent.setType("text/plain");
 
@@ -159,5 +163,27 @@ public class QuickFragmentModel extends Model {
             extraText += "\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
         }
         return extraText;
+    }
+    public String getFullTextToShareEmergency(Context context) {
+        Location location = mLocation;
+        String extraText = null;
+        extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
+        extraText += context.getString(R.string.text_emergency)+"\n";
+        if(!TextUtils.isEmpty(mAddress)) {
+            extraText += "\n" + mAddress+" \n\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+        } else {
+            extraText += "\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+        }
+
+        return extraText;
+    }
+    public String getTargetNumber(Context context, String target) {
+        String number = null;
+        if(target.equals(context.getString(R.string.target_112))) {
+            number = context.getString(R.string.target_number_112);
+        } else if(target.equals(context.getString(R.string.target_119))) {
+            number = context.getString(R.string.target_number_119);
+        }
+        return number;
     }
 }

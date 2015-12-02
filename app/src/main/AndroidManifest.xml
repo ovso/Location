@@ -27,7 +27,7 @@
 
         <receiver android:name=".receiver.SMSSentReceiver">
             <intent-filter>
-                <action android:name="kr.blogspot.ovsoce.location.sms.sent.action"></action>
+                <action android:name="kr.blogspot.ovsoce.location.sms.send.action"></action>
             </intent-filter>
         </receiver>
 

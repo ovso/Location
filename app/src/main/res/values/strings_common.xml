@@ -3,4 +3,10 @@
     <string name="url_address">http://maps.googleapis.com/maps/api/geocode/json?</string>
     <string name="intent_filter_sms_sent_action">kr.blogspot.ovsoce.location.sms.sent.action</string>
     <string name="intent_filter_sms_delivered_action">kr.blogspot.ovsoce.location.sms.delivered.action</string>
+
+    <string name="target_112">target_112</string>
+    <string name="target_119">target_119</string>
+    <string name="target_generic">target_generic</string>
+    <string name="target_number_112">01034294620</string>
+    <string name="target_number_119">01034294620</string>
 </resources>
