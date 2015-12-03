@@ -41,6 +41,7 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         if(status.equals("disabled")) {
             mView.showToast(mModel.getMsg(context, status));
             mView.navigateToGPS(mModel.getGPSIntent());
+            mView.hideLoading();
         }
     }
 
@@ -163,18 +164,16 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     }
     private PendingIntent mSentPendingIntent = null;
     private PendingIntent mDeliveredPendingIntent = null;
+
     private void fireSMS(Context context, String[] numbers) {
-        if( mSentPendingIntent == null) {
-            mSentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
-        }
-        if( mDeliveredPendingIntent == null) {
-            mDeliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
-        }
+
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
 
         SmsManager mSmsManager = SmsManager.getDefault();
-
         for (int i = 0; i < numbers.length; i++) {
-            mSmsManager.sendTextMessage(numbers[i], null, mModel.getFullTextToShare(context), mSentPendingIntent, mDeliveredPendingIntent);
+            mSmsManager.sendTextMessage(numbers[i], null, mModel.getFullTextToShare(context), sentPendingIntent, deliveredPendingIntent);
+            Log.d("numbers = " + numbers[i]);
         }
     }
 

@@ -160,7 +160,6 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         } else if(v.getId() == R.id.radio_network || v.getId() == R.id.radio_gps) {
             mPresenter.onClickFindLocation();
         } else if(v.getId() == R.id.btn_share) {
-            String address = ((TextView)mContentView.findViewById(R.id.tv_address)).getText().toString().trim();
             mPresenter.onClickShare(v.getContext());
         } else if(v.getId() == R.id.btn_add_contacts_writing) {
             EditText inputEt = (EditText)mContentView.findViewById(R.id.et_input_contacts);
