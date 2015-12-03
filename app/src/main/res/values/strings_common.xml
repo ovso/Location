@@ -9,4 +9,8 @@
     <string name="target_generic">target_generic</string>
     <string name="target_number_112">01034294620</string>
     <string name="target_number_119">01034294620</string>
+
+    <string name="api_key_server">AIzaSyArCo6q387KrYkVb0gp_w15fzO3cd6NFBI</string>
+    <string name="url_shortener_googleapi">https://www.googleapis.com/urlshortener/v1/url?key=</string>
+
 </resources>

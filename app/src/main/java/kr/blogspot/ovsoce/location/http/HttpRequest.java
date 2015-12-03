@@ -55,7 +55,7 @@ public class HttpRequest extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("result = " + result);
+            //Log.d("result = " + result);
             if(result != null) {
                 mResultListener.onResult(result);
             }

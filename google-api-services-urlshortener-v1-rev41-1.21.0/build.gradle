@@ -1,0 +1,2 @@
+configurations.create("default")
+artifacts.add("default", file('google-api-services-urlshortener-v1-rev41-1.21.0.jar'))

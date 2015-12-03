@@ -51,17 +51,22 @@
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold|italic" />
+    <TextView
+        android:id="@+id/tv_short_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textStyle="bold|italic" />
     <TextView
         android:id="@+id/tv_latlng"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:textStyle="bold|italic"/>
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/ic_maps_place"
         android:id="@+id/btn_maps" />
     <FrameLayout
         android:layout_width="match_parent"

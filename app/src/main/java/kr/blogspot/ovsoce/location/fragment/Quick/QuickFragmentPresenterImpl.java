@@ -33,8 +33,10 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onLocation(final Context context, final Location location) {
-        mModel.findAddress(context, location, mView);
-        mView.showLatlng(location.getLatitude() + ", " + location.getLongitude());
+        mModel.setLocation(location);
+        mView.showLatlng(mModel.getLocation().getLatitude() + ", " + mModel.getLocation().getLongitude());
+        mModel.urlShortened(context, mView);
+        //mModel.findAddress(context, mView);
     }
 
     @Override
@@ -102,8 +104,9 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void onClickFindLocation() {
-        mView.clearAddressLatLng();
+        mView.clearLocationInfoTextView();
         mModel.removeLocation();
+        mModel.removeShortUrl();
         mView.findLocation(mModel.getLocationProvider());
     }
 
@@ -153,32 +156,32 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     @Override
     public void sendSMS(Context context, String target) {
         String[] numbers = null;
-        ArrayList<String> msgList = new ArrayList<String>();
-        ArrayList<PendingIntent> sentPendingIntentList = new ArrayList<PendingIntent>();
-        ArrayList<PendingIntent> deliveredPendingIntentList = new ArrayList<PendingIntent>();
+        ArrayList<String> msgList = new ArrayList<>();
+        msgList.clear();
+        ArrayList<PendingIntent> sentPendingIntentList = new ArrayList<>();
+        ArrayList<PendingIntent> deliveredPendingIntentList = new ArrayList<>();
         PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
         PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
         if(target.equals(context.getString(R.string.target_generic))) {
             numbers =  new String[mModel.getContactsItemArrayListSize()];
             for (int i = 0; i < mModel.getContactsItemArrayListSize(); i++) {
                 numbers[i] = mModel.getContactsItemArrayList().get(i).getNumber();
-                msgList.add(mModel.getFullTextToShare(context));
                 sentPendingIntentList.add(sentPendingIntent);
                 deliveredPendingIntentList.add(deliveredPendingIntent);
             }
         } else if(target.equals(context.getString(R.string.target_112)) || target.equals(context.getString(R.string.target_119))) {
-            msgList.add(mModel.getFullTextToShare(context));
             sentPendingIntentList.add(sentPendingIntent);
             deliveredPendingIntentList.add(deliveredPendingIntent);
             numbers =  new String[]{mModel.getTargetNumber(context, target)};
         }
+        msgList.add(mModel.getFullTextToShare(context));
         fireSMS(numbers, msgList, sentPendingIntentList, deliveredPendingIntentList);
     }
 
     private void fireSMS(String[] numbers, ArrayList<String> msgList, ArrayList<PendingIntent> sentPendingIntentList, ArrayList<PendingIntent> deliveredPendingIntentList) {
-        SmsManager mSmsManager = SmsManager.getDefault();
+        SmsManager smsManager = SmsManager.getDefault();
         for (int i = 0; i < numbers.length; i++) {
-            mSmsManager.sendMultipartTextMessage(numbers[i], null, msgList, sentPendingIntentList, deliveredPendingIntentList);
+            smsManager.sendMultipartTextMessage(numbers[i], null, msgList, sentPendingIntentList, deliveredPendingIntentList);
             Log.d("numbers = " + numbers[i]);
         }
     }

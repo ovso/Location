@@ -19,6 +19,7 @@ import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.ContactsItem;
 import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
 import kr.blogspot.ovsoce.location.http.HttpRequest;
+import kr.blogspot.ovsoce.location.http.HttpRequestPost;
 import kr.blogspot.ovsoce.location.main.Model;
 
 /**
@@ -32,8 +33,8 @@ public class QuickFragmentModel extends Model {
     private Location mLocation = null;
     // 주소로 주소, 경위도 찾기
     //http://maps.googleapis.com/maps/api/geocode/json?address=%ED%9A%A8%EB%A0%B9%EB%A1%9C%20237&sensor=true&region=ko&language=ko
-    public void findAddress(final Context context, final Location location, final QuickFragmentPresenter.View view){
-        mLocation = location;
+    public void findAddress(final Context context, final QuickFragmentPresenter.View view){
+        Location location = mLocation;
 
         Uri uri = Uri.parse(context.getString(R.string.url_address)).buildUpon()
         .appendQueryParameter("latlng", location.getLatitude() + "," + location.getLongitude())
@@ -42,7 +43,7 @@ public class QuickFragmentModel extends Model {
         new HttpRequest(uri.toString(), new HttpRequest.ResultListener() {
             @Override
             public void onResult(String result) {
-                String address = parseJson(result);
+                String address = parseJsonAddress(result);
                 if( address != null) {
                     mAddress = address;
                     view.showAddress(address);
@@ -60,16 +61,36 @@ public class QuickFragmentModel extends Model {
     public Location getLocation() {
         return mLocation;
     }
+    public void setLocation(Location location) {
+        mLocation = location;
+    }
+
     public void removeLocation() {
         mLocation = null;
     }
-    private String parseJson(String json) {
+    public void removeShortUrl() {
+        mShortUrl = null;
+    }
+    private String parseJsonAddress(String json) {
         if(json != null) {
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
                 jsonObject = (JSONObject) jsonArray.get(0);
                 return jsonObject.getString("formatted_address");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+    private String parseJsonShortUrl(String json) {
+        if(json != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                return jsonObject.getString("id");
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
@@ -154,27 +175,26 @@ public class QuickFragmentModel extends Model {
         return Intent.createChooser(intent, context.getString(R.string.app_name));
     }
     public String getFullTextToShare(Context context) {
-        Location location = mLocation;
         String extraText = null;
-        extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
+        //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText += "\n" + mAddress+" \n\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+            extraText = "\n" + mAddress+" \n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
-            extraText += "\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+            extraText = "\n"+mShortUrl+"\n";//+getMapAddress();
         }
+        Log.d("extraText="+extraText);
         return extraText;
     }
     public String getFullTextToShareEmergency(Context context) {
-        Location location = mLocation;
         String extraText = null;
-        extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
-        extraText += context.getString(R.string.text_emergency)+"\n";
+        //extraText = "\n[ " + context.getString(R.string.app_name)+" ]"+"\n";
+        extraText = context.getString(R.string.text_emergency)+"\n";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText += "\n" + mAddress+" \n\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+            extraText += "\n" + mAddress+" \n"+mShortUrl+"\n"+getMapAddress();
         } else {
-            extraText += "\n"+"https://maps.google.com/maps?q="+location.getLatitude()+","+location.getLongitude();
+            extraText += "\n"+mShortUrl+"\n"+getMapAddress();
         }
-
+        Log.d("extraText="+extraText);
         return extraText;
     }
     public String getTargetNumber(Context context, String target) {
@@ -186,4 +206,28 @@ public class QuickFragmentModel extends Model {
         }
         return number;
     }
+    private String mShortUrl = null;
+    public void urlShortened(final Context context, final QuickFragmentPresenter.View view) {
+        JSONObject urlParamJsonObject = new JSONObject();
+        try {
+            urlParamJsonObject.put("longUrl", getMapAddress());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new HttpRequestPost(context.getString(R.string.url_shortener_googleapi)+context.getString(R.string.api_key_server), urlParamJsonObject.toString(), new HttpRequestPost.ResultListener() {
+            @Override
+            public void onResult(String result) {
+                String shortUrl = parseJsonShortUrl(result);
+                view.showShortUrl(shortUrl);
+                //mShortUrl = getMapAddress();
+                mShortUrl = shortUrl;
+                findAddress(context, view);
+            }
+        }).execute();
+    }
+    private String getMapAddress() {
+        return "https://maps.google.com/maps?q=" + mLocation.getLatitude() + ", " + mLocation.getLongitude();
+    }
+
 }

@@ -308,9 +308,10 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     }
 
     @Override
-    public void clearAddressLatLng() {
+    public void clearLocationInfoTextView() {
         ((TextView)mContentView.findViewById(R.id.tv_address)).setText(null);
         ((TextView)mContentView.findViewById(R.id.tv_latlng)).setText(null);
+        ((TextView)mContentView.findViewById(R.id.tv_short_url)).setText(null);
     }
 
     @Override
@@ -332,6 +333,12 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
                 .setTitle(R.string.text_sms_send)
                 .setMessage(message)
                 .show();
+    }
+
+    @Override
+    public void showShortUrl(String shortUrl) {
+        Log.d("shortUrl = " + shortUrl);
+        ((TextView)mContentView.findViewById(R.id.tv_short_url)).setText(shortUrl);
     }
 
     @Override

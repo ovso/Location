@@ -41,7 +41,8 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
         void findLocation(String locationProvider);
         void clearInputContactsEditText();
         void showRemoveContactsAlert();
-        void clearAddressLatLng();
+        void clearLocationInfoTextView();
         void showSMSDialog(String message, String target);
+        void showShortUrl(String shortUrl);
     }
 }
