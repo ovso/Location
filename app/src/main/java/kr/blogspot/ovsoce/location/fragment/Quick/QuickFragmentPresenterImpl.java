@@ -11,6 +11,8 @@ import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+
 import kr.blogspot.ovsoce.location.R;
 import kr.blogspot.ovsoce.location.common.Log;
 
@@ -151,28 +153,32 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
     @Override
     public void sendSMS(Context context, String target) {
         String[] numbers = null;
+        ArrayList<String> msgList = new ArrayList<String>();
+        ArrayList<PendingIntent> sentPendingIntentList = new ArrayList<PendingIntent>();
+        ArrayList<PendingIntent> deliveredPendingIntentList = new ArrayList<PendingIntent>();
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
         if(target.equals(context.getString(R.string.target_generic))) {
             numbers =  new String[mModel.getContactsItemArrayListSize()];
             for (int i = 0; i < mModel.getContactsItemArrayListSize(); i++) {
                 numbers[i] = mModel.getContactsItemArrayList().get(i).getNumber();
+                msgList.add(mModel.getFullTextToShare(context));
+                sentPendingIntentList.add(sentPendingIntent);
+                deliveredPendingIntentList.add(deliveredPendingIntent);
             }
-            fireSMS(context, numbers);
         } else if(target.equals(context.getString(R.string.target_112)) || target.equals(context.getString(R.string.target_119))) {
+            msgList.add(mModel.getFullTextToShare(context));
+            sentPendingIntentList.add(sentPendingIntent);
+            deliveredPendingIntentList.add(deliveredPendingIntent);
             numbers =  new String[]{mModel.getTargetNumber(context, target)};
-            fireSMS(context, numbers);
         }
+        fireSMS(numbers, msgList, sentPendingIntentList, deliveredPendingIntentList);
     }
-    private PendingIntent mSentPendingIntent = null;
-    private PendingIntent mDeliveredPendingIntent = null;
 
-    private void fireSMS(Context context, String[] numbers) {
-
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
-
+    private void fireSMS(String[] numbers, ArrayList<String> msgList, ArrayList<PendingIntent> sentPendingIntentList, ArrayList<PendingIntent> deliveredPendingIntentList) {
         SmsManager mSmsManager = SmsManager.getDefault();
         for (int i = 0; i < numbers.length; i++) {
-            mSmsManager.sendTextMessage(numbers[i], null, mModel.getFullTextToShare(context), sentPendingIntent, deliveredPendingIntent);
+            mSmsManager.sendMultipartTextMessage(numbers[i], null, msgList, sentPendingIntentList, deliveredPendingIntentList);
             Log.d("numbers = " + numbers[i]);
         }
     }
