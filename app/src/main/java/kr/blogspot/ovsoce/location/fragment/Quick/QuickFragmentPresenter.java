@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import kr.blogspot.ovsoce.location.fragment.ContactsItem;
@@ -28,7 +29,7 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
     void sendSMS(Context context, String target);
     void onClick112(Context context);
     void onClick119(Context context);
-    interface View extends FragmentPresenter.View {
+    interface View extends FragmentPresenter.View, Serializable {
         void showAddress(String address);
         void showLatlng(String latlng);
         void navigateToGPS(Intent intent);

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
@@ -155,6 +156,7 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     @Override
     public void sendSMS(Context context, String target) {
+        //mView.showLoading();
         String[] numbers = null;
         ArrayList<String> msgList = new ArrayList<>();
         msgList.clear();
@@ -166,14 +168,13 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
             numbers =  new String[mModel.getContactsItemArrayListSize()];
             for (int i = 0; i < mModel.getContactsItemArrayListSize(); i++) {
                 numbers[i] = mModel.getContactsItemArrayList().get(i).getNumber();
-                sentPendingIntentList.add(sentPendingIntent);
-                deliveredPendingIntentList.add(deliveredPendingIntent);
             }
         } else if(target.equals(context.getString(R.string.target_112)) || target.equals(context.getString(R.string.target_119))) {
-            sentPendingIntentList.add(sentPendingIntent);
-            deliveredPendingIntentList.add(deliveredPendingIntent);
             numbers =  new String[]{mModel.getTargetNumber(context, target)};
         }
+
+        deliveredPendingIntentList.add(deliveredPendingIntent);
+        sentPendingIntentList.add(sentPendingIntent);
         msgList.add(mModel.getFullTextToShare(context));
         fireSMS(numbers, msgList, sentPendingIntentList, deliveredPendingIntentList);
     }

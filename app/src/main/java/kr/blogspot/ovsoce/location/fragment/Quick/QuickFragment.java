@@ -31,9 +31,6 @@ import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.BaseFragment;
 import kr.blogspot.ovsoce.location.fragment.ContactsItem;
 
-/**
- * Created by jaeho_oh on 2015-11-16.
- */
 public class QuickFragment extends BaseFragment implements QuickFragmentPresenter.View, View.OnClickListener, LocationListener, EditText.OnKeyListener, RadioGroup.OnCheckedChangeListener{
 
     @Override
@@ -56,7 +53,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
 
     @Override
     public void showLoading() {
-        mProgressDialog = ProgressDialog.show(getActivity(), "", "잠시만 기다려 주세요");
+        mProgressDialog = ProgressDialog.show(getActivity(), "", getString(R.string.text_waiting));
         mProgressDialog.setCancelable(true);
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override

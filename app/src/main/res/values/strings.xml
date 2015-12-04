@@ -3,6 +3,9 @@
 
     <string name="menu_title_quick_location">Quick Location</string>
     <string name="menu_title_exact_location">Exact Location</string>
+    <string name="menu_title_help">Help</string>
+    <string name="menu_title_review">Review</string>
+    <string name="menu_title_share">Share</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -25,4 +28,5 @@
     <string name="text_emergency">All obligations of sms sent is for you !!</string>
     <string name="text_check_network">Network(In,Out)\naccuracy ●●○○○\nspeed●●●●●</string>
     <string name="text_check_gps">GPS(Outdoor)\naccuracy ●●●●●\nspeed●●●○○</string>
+    <string name="text_waiting">waiting...</string>
 </resources>

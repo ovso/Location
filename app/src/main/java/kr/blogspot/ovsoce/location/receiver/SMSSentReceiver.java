@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import kr.blogspot.ovsoce.location.fragment.Quick.QuickFragmentPresenter;
+
 /**
  * Created by jaeho_oh on 2015-12-01.
  */

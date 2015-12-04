@@ -3,7 +3,10 @@
 
     <string name="menu_title_quick_location">빠른 내 위치</string>
     <string name="menu_title_exact_location">정확한 내 위치</string>
-    
+    <string name="menu_title_help">도움말</string>
+    <string name="menu_title_review">리뷰 남기기</string>
+    <string name="menu_title_share">앱 공유</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -25,4 +28,5 @@
     <string name="text_emergency">*** 긴급 문자 발송의 모든 책임은 본인에게 있습니다. ***</string>
     <string name="text_check_network">Network(실내-외)\n정확도 ●●○○○\n속도●●●●●</string>
     <string name="text_check_gps">GPS(실외)\n정확도 ●●●●●\n속도 ●●●○○</string>
+    <string name="text_waiting">잠시만 기다려주세요.</string>
 </resources>
