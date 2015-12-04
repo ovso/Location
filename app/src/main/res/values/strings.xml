@@ -23,4 +23,6 @@
     <string name="text_119">119 of Korea\nFire,Rescue,Emergency,Disaster</string>
     <string name="text_112">112 of Korea\nCrime</string>
     <string name="text_emergency">All obligations of sms sent is for you !!</string>
+    <string name="text_check_network">Network(In,Out)\naccuracy ●●○○○\nspeed●●●●●</string>
+    <string name="text_check_gps">GPS(Outdoor)\naccuracy ●●●●●\nspeed●●●○○</string>
 </resources>

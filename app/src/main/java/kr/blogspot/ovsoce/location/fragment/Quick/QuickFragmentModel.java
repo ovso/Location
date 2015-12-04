@@ -123,8 +123,8 @@ public class QuickFragmentModel extends Model {
         Log.d("uri = " + uri.toString());
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        //intent.setPackage("com.google.android.apps.maps");
-        /*intent.setPackage("com.nhn.android.nmap");*/
+
+        //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getMapAddress()));
         return intent;
     }
     public Intent getContactsIntent() {
@@ -187,12 +187,12 @@ public class QuickFragmentModel extends Model {
     }
     public String getFullTextToShareEmergency(Context context) {
         String extraText = null;
-        //extraText = "\n[ " + context.getString(R.string.app_name)+" ]"+"\n";
+        //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
         extraText = context.getString(R.string.text_emergency)+"\n";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText += "\n" + mAddress+" \n"+mShortUrl+"\n"+getMapAddress();
+            extraText += "\n" + mAddress+" \n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
-            extraText += "\n"+mShortUrl+"\n"+getMapAddress();
+            extraText += "\n"+mShortUrl;//+"\n"+getMapAddress();
         }
         Log.d("extraText="+extraText);
         return extraText;

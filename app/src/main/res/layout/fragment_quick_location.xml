@@ -3,141 +3,172 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/et_contacts"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:longClickable="false"
-            android:scrollbars="horizontal"
-            android:hint="@string/text_import_contacts"
-            />
-        <ImageButton
-            android:id="@+id/btn_add_contacts"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_social_person_add"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/et_input_contacts"
-            android:hint="@string/text_contacts_writing"/>
-        <ImageButton
-            android:id="@+id/btn_add_contacts_writing"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_editor_border_color"/>
-    </LinearLayout>
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="10dp"/>
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold|italic" />
-    <TextView
-        android:id="@+id/tv_short_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold|italic" />
-    <TextView
-        android:id="@+id/tv_latlng"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold|italic"/>
-    <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_maps_place"
-        android:id="@+id/btn_maps" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
-        <RadioGroup
-            android:id="@+id/radiogroup_location_provider"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_network"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/holo_blue_light"
-                android:text="Network(실내-외)"
-                android:textStyle="bold"/>
-
-            <RadioButton
-                android:id="@+id/radio_gps"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/holo_blue_light"
-                android:text="GPS(실외)"
-                android:textStyle="bold" />
-        </RadioGroup>
-        <View
-            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:layout_gravity="center"/>
-    </FrameLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"/>
-    <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_send"
-        android:id="@+id/btn_sms" />
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/btn_112"
-            android:text="@string/text_112"
-            android:textStyle="bold"
-            android:maxLines="2"/>
+                <EditText
+                    android:id="@+id/et_contacts"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/text_import_contacts"
+                    android:inputType="phone"
+                    android:longClickable="false"
+                    android:scrollbars="horizontal" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/btn_119"
-            android:text="@string/text_119"
-            android:textStyle="bold"
-            android:maxLines="2"/>
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/btn_add_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_social_person_add" />
+            </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btn_share"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_share" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <EditText
+                    android:id="@+id/et_input_contacts"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:focusableInTouchMode="true"
+                    android:ems="10"
+                    android:hint="@string/text_contacts_writing"
+                    android:inputType="phone" />
+
+                <ImageButton
+                    android:id="@+id/btn_add_contacts_writing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_editor_border_color" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/tv_short_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/tv_latlng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic" />
+
+            <ImageButton
+                android:id="@+id/btn_maps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_maps_place" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <RadioGroup
+                    android:id="@+id/radiogroup_location_provider"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio_network"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/holo_blue_light"
+                        android:text="@string/text_check_network"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radio_gps"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/holo_blue_light"
+                        android:text="@string/text_check_gps"
+                        android:textStyle="bold" />
+                </RadioGroup>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/white" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <ImageButton
+                android:id="@+id/btn_sms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_send" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_112"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:text="@string/text_112"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_119"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="2"
+                    android:text="@string/text_119"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_share" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
