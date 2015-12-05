@@ -15,5 +15,16 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void init(Context context) {
+
+    }
+
+    @Override
+    public void appShare(Context context) {
+        mView.navigateToShare(mModel.getAppShareIntent(context));
+    }
+
+    @Override
+    public void review(Context context) {
+        mView.navigateToReview(mModel.getReviewIntent(context));
     }
 }

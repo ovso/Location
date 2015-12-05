@@ -3,11 +3,11 @@ package kr.blogspot.ovsoce.location.fragment.Quick;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
@@ -162,8 +162,8 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         msgList.clear();
         ArrayList<PendingIntent> sentPendingIntentList = new ArrayList<>();
         ArrayList<PendingIntent> deliveredPendingIntentList = new ArrayList<>();
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.send.action"), 0);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent("kr.blogspot.ovsoce.location.sms.delivered.action"), 0);
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.intent_filter_sms_sent_action)), 0);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context.getString(R.string.intent_filter_sms_delivered_action)), 0);
         if(target.equals(context.getString(R.string.target_generic))) {
             numbers =  new String[mModel.getContactsItemArrayListSize()];
             for (int i = 0; i < mModel.getContactsItemArrayListSize(); i++) {
@@ -181,9 +181,8 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
 
     private void fireSMS(String[] numbers, ArrayList<String> msgList, ArrayList<PendingIntent> sentPendingIntentList, ArrayList<PendingIntent> deliveredPendingIntentList) {
         SmsManager smsManager = SmsManager.getDefault();
-        for (int i = 0; i < numbers.length; i++) {
-            smsManager.sendMultipartTextMessage(numbers[i], null, msgList, sentPendingIntentList, deliveredPendingIntentList);
-            Log.d("numbers = " + numbers[i]);
+        for (String number: numbers) {
+            smsManager.sendMultipartTextMessage(number, null, msgList, sentPendingIntentList, deliveredPendingIntentList);
         }
     }
 
@@ -206,4 +205,17 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
             mView.showToast(mModel.getMsg(context, "emptyLocation"));
         }
     }
+
+    @Override
+    public void unregisterReceiver(Context context) {
+        Log.d("");
+        context.unregisterReceiver(mModel.getSMSSentReceiver(mView));
+        context.unregisterReceiver(mModel.getSMSDeliveredReceiver(mView));
+    }
+    @Override
+    public void registerReceiver(Context context) {
+        context.registerReceiver(mModel.getSMSSentReceiver(mView), new IntentFilter(context.getString(R.string.intent_filter_sms_sent_action)));
+        context.registerReceiver(mModel.getSMSDeliveredReceiver(mView), new IntentFilter(context.getString(R.string.intent_filter_sms_delivered_action)));
+    }
+
 }

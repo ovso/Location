@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
 
+<!--
         <receiver android:name=".receiver.SMSSentReceiver">
             <intent-filter>
                 <action android:name="kr.blogspot.ovsoce.location.sms.send.action"></action>
@@ -36,6 +37,7 @@
                 <action android:name="kr.blogspot.ovsoce.location.sms.delivered.action"></action>
             </intent-filter>
         </receiver>
+-->
     </application>
 
 </manifest>

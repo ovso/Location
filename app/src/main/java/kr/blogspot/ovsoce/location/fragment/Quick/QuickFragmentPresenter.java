@@ -29,7 +29,9 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
     void sendSMS(Context context, String target);
     void onClick112(Context context);
     void onClick119(Context context);
-    interface View extends FragmentPresenter.View, Serializable {
+    void registerReceiver(Context context);
+    void unregisterReceiver(Context context);
+    interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);
         void navigateToGPS(Intent intent);

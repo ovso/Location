@@ -29,4 +29,11 @@
     <string name="text_check_network">Network(실내-외)\n정확도 ●●○○○\n속도●●●●●</string>
     <string name="text_check_gps">GPS(실외)\n정확도 ●●●●●\n속도 ●●●○○</string>
     <string name="text_waiting">잠시만 기다려주세요.</string>
+
+    <string name="sms_success">전송이 완료되었습니다.</string>
+    <string name="sms_fail">전송이 실패했습니다.</string>
+    <string name="sms_no_area">서비스 지역이 아닙니다.</string>
+    <string name="sms_off_wireless">무선이(Radio) 꺼져있습니다.</string>
+    <string name="sms_pdu_null">PDU 실패</string>
+
 </resources>

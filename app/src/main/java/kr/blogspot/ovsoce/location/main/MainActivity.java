@@ -189,8 +189,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_quick) {
             replaceFragment(getFragment(id));
-        } else if (id == R.id.nav_exact) {
-            replaceFragment(getFragment(id));
+        }else if( id == R.id.nav_share) {
+            mPresenter.appShare(this);
+        } else if( id == R.id.nav_review) {
+            mPresenter.review(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -212,13 +214,18 @@ public class MainActivity extends AppCompatActivity
                 mQuickFragment = new QuickFragment();
             }
             fragment = mQuickFragment;
-        } else if(menuId == R.id.nav_exact) {
-            if(mExactFragment == null) {
-                mExactFragment = new ExactFragment();
-            }
-            fragment = mExactFragment;
         }
 
         return fragment;
+    }
+
+    @Override
+    public void navigateToShare(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToReview(Intent intent) {
+        startActivity(intent);
     }
 }

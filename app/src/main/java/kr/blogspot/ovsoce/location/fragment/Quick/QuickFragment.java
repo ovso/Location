@@ -1,6 +1,7 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -107,6 +107,14 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         radioGroup.getChildAt(0).setOnClickListener(this);
         radioGroup.getChildAt(1).setOnClickListener(this);
         radioGroup.check(radioGroup.getChildAt(0).getId());
+
+        mPresenter.registerReceiver(getActivity());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.unregisterReceiver(getActivity());
     }
 
     @Override
@@ -232,11 +240,6 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     //private Location mLocation;
 
     @Override
@@ -265,7 +268,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == getActivity().RESULT_OK) {
+        if(resultCode == Activity.RESULT_OK) {
             if(requestCode == REQUEST_CODE_PICK_CONTACTS) {
                 mPresenter.onContactsActivityResult(getActivity(), data);
             }

@@ -1,7 +1,9 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -21,6 +23,8 @@ import kr.blogspot.ovsoce.location.fragment.ContactsItemImpl;
 import kr.blogspot.ovsoce.location.http.HttpRequest;
 import kr.blogspot.ovsoce.location.http.HttpRequestPost;
 import kr.blogspot.ovsoce.location.main.Model;
+import kr.blogspot.ovsoce.location.receiver.SMSDeliveredReceiver;
+import kr.blogspot.ovsoce.location.receiver.SMSSentReceiver;
 
 /**
  * Created by jaeho_oh on 2015-11-16.
@@ -194,7 +198,7 @@ public class QuickFragmentModel extends Model {
         } else {
             extraText += "\n"+mShortUrl;//+"\n"+getMapAddress();
         }
-        Log.d("extraText="+extraText);
+        Log.d("extraText=" + extraText);
         return extraText;
     }
     public String getTargetNumber(Context context, String target) {
@@ -229,5 +233,19 @@ public class QuickFragmentModel extends Model {
     private String getMapAddress() {
         return "https://maps.google.com/maps?q=" + mLocation.getLatitude() + ", " + mLocation.getLongitude();
     }
+    private SMSSentReceiver mSMSSentReceiver;
+    private SMSDeliveredReceiver mSMSDeliveredReceiver;
 
+    public BroadcastReceiver getSMSSentReceiver(QuickFragmentPresenter.View view) {
+        if(mSMSSentReceiver == null) {
+            mSMSSentReceiver = new SMSSentReceiver(view);
+        }
+        return mSMSSentReceiver;
+    }
+    public BroadcastReceiver getSMSDeliveredReceiver(QuickFragmentPresenter.View view) {
+        if(mSMSDeliveredReceiver == null) {
+            mSMSDeliveredReceiver = new SMSDeliveredReceiver(view);
+        }
+        return mSMSDeliveredReceiver;
+    }
 }

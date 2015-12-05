@@ -28,5 +28,12 @@
     <string name="text_emergency">All obligations of sms sent is for you !!</string>
     <string name="text_check_network">Network(In,Out)\naccuracy ●●○○○\nspeed●●●●●</string>
     <string name="text_check_gps">GPS(Outdoor)\naccuracy ●●●●●\nspeed●●●○○</string>
-    <string name="text_waiting">waiting...</string>
+    <string name="text_waiting">Waiting...</string>
+
+    <string name="sms_success">Sent success</string>
+    <string name="sms_fail">Sent fail</string>
+    <string name="sms_no_area">Not the service area</string>
+    <string name="sms_off_wireless">Wireless (Radio) is off</string>
+    <string name="sms_pdu_null">PDU fail</string>
+
 </resources>
