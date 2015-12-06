@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import kr.blogspot.ovsoce.location.common.Log;
 import kr.blogspot.ovsoce.location.fragment.Quick.QuickFragmentPresenter;
 
 /**

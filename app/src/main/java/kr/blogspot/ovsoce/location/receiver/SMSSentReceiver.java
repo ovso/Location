@@ -21,6 +21,7 @@ public class SMSSentReceiver extends BroadcastReceiver {
     }
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("");
         switch(getResultCode()){
             case Activity.RESULT_OK:
                 // 전송 성공

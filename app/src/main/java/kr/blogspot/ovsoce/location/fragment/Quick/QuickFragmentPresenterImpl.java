@@ -1,6 +1,8 @@
 package kr.blogspot.ovsoce.location.fragment.Quick;
 
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -212,6 +215,22 @@ public class QuickFragmentPresenterImpl implements QuickFragmentPresenter{
         context.unregisterReceiver(mModel.getSMSSentReceiver(mView));
         context.unregisterReceiver(mModel.getSMSDeliveredReceiver(mView));
     }
+
+    @Override
+    public void onClickCopy(Context context) {
+        Location location = mModel.getLocation();
+        if(location != null) {
+            ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+            String text = mModel.getFullTextToShare(context)+
+                    "\n"+mModel.getLocation().getLatitude()+","+mModel.getLocation().getLongitude();
+            ClipData clip = ClipData.newPlainText("label", text);
+            clipboard.setPrimaryClip(clip);
+            mView.showToast(mModel.getMsg(context, "copy"));
+        } else {
+            mView.showToast(mModel.getMsg(context, "emptyLocation"));
+        }
+    }
+
     @Override
     public void registerReceiver(Context context) {
         context.registerReceiver(mModel.getSMSSentReceiver(mView), new IntentFilter(context.getString(R.string.intent_filter_sms_sent_action)));

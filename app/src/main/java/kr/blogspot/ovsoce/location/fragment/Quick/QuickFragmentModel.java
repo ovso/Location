@@ -115,6 +115,8 @@ public class QuickFragmentModel extends Model {
             return context.getString(R.string.msg_empty_location);
         } else if(type.equals("emptyInputNumber")) {
             return context.getString(R.string.msg_empty_input_number);
+        } else if(type.equals("copy")) {
+            return context.getString(R.string.msg_copy);
         }
         else {
             return "";
@@ -182,7 +184,7 @@ public class QuickFragmentModel extends Model {
         String extraText = null;
         //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText = "\n" + mAddress+" \n"+mShortUrl;//+"\n"+getMapAddress();
+            extraText = "\n" + mAddress+"\n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
             extraText = "\n"+mShortUrl+"\n";//+getMapAddress();
         }
@@ -194,7 +196,7 @@ public class QuickFragmentModel extends Model {
         //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
         extraText = context.getString(R.string.text_emergency)+"\n";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText += "\n" + mAddress+" \n"+mShortUrl;//+"\n"+getMapAddress();
+            extraText += "\n" + mAddress+"\n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
             extraText += "\n"+mShortUrl;//+"\n"+getMapAddress();
         }

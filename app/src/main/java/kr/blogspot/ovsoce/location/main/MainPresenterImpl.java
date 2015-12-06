@@ -2,6 +2,8 @@ package kr.blogspot.ovsoce.location.main;
 
 import android.content.Context;
 
+import com.fsn.cauly.CaulyAdView;
+
 /**
  * Created by jaeho_oh on 2015-11-16.
  */
@@ -15,7 +17,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void init(Context context) {
-
+        mView.initAd(mModel.getCaulyAdView(context));
     }
 
     @Override

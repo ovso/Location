@@ -90,6 +90,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_maps_place" />
+            <ImageButton
+                android:id="@+id/btn_copy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_av_my_library_books" />
 
             <FrameLayout
                 android:layout_width="match_parent"

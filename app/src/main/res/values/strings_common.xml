@@ -7,10 +7,11 @@
     <string name="target_112">target_112</string>
     <string name="target_119">target_119</string>
     <string name="target_generic">target_generic</string>
-    <string name="target_number_112">01034294620</string>
-    <string name="target_number_119">01034294620</string>
+    <string name="target_number_112">112</string>
+    <string name="target_number_119">119</string>
 
     <string name="api_key_server">AIzaSyArCo6q387KrYkVb0gp_w15fzO3cd6NFBI</string>
     <string name="url_shortener_googleapi">https://www.googleapis.com/urlshortener/v1/url?key=</string>
 
+    <string name="ad_id_cauly">wNUp5JKu</string>
 </resources>

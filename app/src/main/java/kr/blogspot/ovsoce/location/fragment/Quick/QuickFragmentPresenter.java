@@ -31,6 +31,7 @@ public interface QuickFragmentPresenter extends FragmentPresenter {
     void onClick119(Context context);
     void registerReceiver(Context context);
     void unregisterReceiver(Context context);
+    void onClickCopy(Context context);
     interface View extends FragmentPresenter.View {
         void showAddress(String address);
         void showLatlng(String latlng);

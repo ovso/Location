@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Fast location transfer</string>
+    <string name="app_desc">Fees may apply depending on when sending SMS plan.</string>
 
     <string name="menu_title_quick_location">Quick Location</string>
     <string name="menu_title_exact_location">Exact Location</string>
@@ -17,6 +18,7 @@
     <string name="msg_fail_address">Failed to find the address. Location sharing is available.</string>
     <string name="msg_remove_contacts">Contact Deletes one.</string>
     <string name="msg_empty_input_number">Please enter the numbers.</string>
+    <string name="msg_copy">It has been copied.</string>
     <string name="text_ok">ok</string>
     <string name="text_cancel">cancel</string>
     <string name="text_import_contacts">Import contacts(SMS)</string>
@@ -29,6 +31,9 @@
     <string name="text_check_network">Network(In,Out)\naccuracy ●●○○○\nspeed●●●●●</string>
     <string name="text_check_gps">GPS(Outdoor)\naccuracy ●●●●●\nspeed●●●○○</string>
     <string name="text_waiting">Waiting...</string>
+    <string name="text_map">map</string>
+    <string name="text_latlng">lat,lon</string>
+    <string name="text_address">addr</string>
 
     <string name="sms_success">Sent success</string>
     <string name="sms_fail">Sent fail</string>

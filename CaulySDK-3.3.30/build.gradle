@@ -1,0 +1,2 @@
+configurations.create("default")
+artifacts.add("default", file('CaulySDK-3.3.30.jar'))

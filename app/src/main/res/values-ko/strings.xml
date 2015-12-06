@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">빠른위치전송</string>
+    <string name="app_desc">SMS 전송시 요금제에 따라 요금이 부과됩니다.</string>
 
     <string name="menu_title_quick_location">빠른 내 위치</string>
     <string name="menu_title_exact_location">정확한 내 위치</string>
@@ -17,6 +18,7 @@
     <string name="msg_fail_address">주소찾기에 실패했습니다. 위치공유는 가능합니다.</string>
     <string name="msg_remove_contacts">연락처 하나를 삭제합니다.</string>
     <string name="msg_empty_input_number">번호를 입력하세요.</string>
+    <string name="msg_copy">복사되었습니다.</string>
     <string name="text_ok">확인</string>
     <string name="text_cancel">취소</string>
     <string name="text_import_contacts">연락처 가져오기(SMS)</string>
@@ -29,6 +31,9 @@
     <string name="text_check_network">Network(실내-외)\n정확도 ●●○○○\n속도●●●●●</string>
     <string name="text_check_gps">GPS(실외)\n정확도 ●●●●●\n속도 ●●●○○</string>
     <string name="text_waiting">잠시만 기다려주세요.</string>
+    <string name="text_map">지도보기</string>
+    <string name="text_latlng">위,경도</string>
+    <string name="text_address">주소</string>
 
     <string name="sms_success">전송이 완료되었습니다.</string>
     <string name="sms_fail">전송이 실패했습니다.</string>

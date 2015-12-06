@@ -36,8 +36,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        mContentView = inflater.inflate(R.layout.fragment_quick_location, null);
-        return mContentView;
+        return mContentView = inflater.inflate(R.layout.fragment_quick_location, null);
     }
 
     private QuickFragmentPresenter mPresenter;
@@ -101,6 +100,7 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
         mContentView.findViewById(R.id.btn_sms).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_112).setOnClickListener(this);
         mContentView.findViewById(R.id.btn_119).setOnClickListener(this);
+        mContentView.findViewById(R.id.btn_copy).setOnClickListener(this);
 
         final RadioGroup radioGroup = (RadioGroup) mContentView.findViewById(R.id.radiogroup_location_provider);
         radioGroup.setOnCheckedChangeListener(this);
@@ -131,10 +131,15 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
     public void navigateToGPS(Intent intent) {
         startActivity(intent);
     }
-
+    private Toast mToast;
     @Override
     public void showToast(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        if(mToast != null) {
+            mToast.cancel();
+            mToast = null;
+        }
+        mToast = Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     @Override
@@ -183,6 +188,8 @@ public class QuickFragment extends BaseFragment implements QuickFragmentPresente
             if(checkSendSMSPermission()) {
                 mPresenter.onClick119(v.getContext());
             }
+        } else if(v.getId() == R.id.btn_copy) {
+            mPresenter.onClickCopy(v.getContext());
         }
     }
     private final static int REQUEST_CODE_SEND_SMS = 0x11;
