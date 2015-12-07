@@ -3,7 +3,6 @@ package kr.blogspot.ovsoce.location.fragment.Quick;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -182,19 +181,19 @@ public class QuickFragmentModel extends Model {
     }
     public String getFullTextToShare(Context context) {
         String extraText = null;
-        //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
+        extraText = "[" + context.getString(R.string.app_name)+"]";
         if(!TextUtils.isEmpty(mAddress)) {
-            extraText = "\n" + mAddress+"\n"+mShortUrl;//+"\n"+getMapAddress();
+            extraText += "\n" + mAddress+"\n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
-            extraText = "\n"+mShortUrl+"\n";//+getMapAddress();
+            extraText += "\n"+mShortUrl+"\n";//+getMapAddress();
         }
         Log.d("extraText="+extraText);
         return extraText;
     }
     public String getFullTextToShareEmergency(Context context) {
         String extraText = null;
-        //extraText = "[ " + context.getString(R.string.app_name)+" ]"+"\n";
-        extraText = context.getString(R.string.text_emergency)+"\n";
+        extraText = "[" + context.getString(R.string.app_name)+"]"+"\n";
+        extraText += context.getString(R.string.text_emergency);
         if(!TextUtils.isEmpty(mAddress)) {
             extraText += "\n" + mAddress+"\n"+mShortUrl;//+"\n"+getMapAddress();
         } else {
